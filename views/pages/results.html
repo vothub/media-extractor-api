@@ -3,11 +3,15 @@
 <!-- <p>Query ID: <code>{{query.id}}</code></p> -->
 
 {{#each results}}
-  {{this}}
-  <!--
-  <strong><a href="/view/{{this.stub}}">{{this.name}}</a></strong>
+  <!-- {{this}} -->
+
+  <p><strong><a href="/view/{{this.canonical.id}}">{{this.canonical.title}}</a></strong></p>
+  <p><small>{{this.canonical.url}}</small></p>
   <br />
-  {{this.description}}
-  -->
+  {{this.canonical.description}}
+  {{#if this.canonical.preferred}}
+    <a href="{{this.canonical.preferred.url}}" target="_blank">Media link</a>
+  {{/if}}
+
   <br /><br />
 {{/each}}

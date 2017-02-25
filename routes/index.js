@@ -44,25 +44,7 @@ routes.push({
 routes.push({
   method: 'POST',
   path: '/resolve',
-  handler: function (req, res) {
-    Helpers.logRequest('URL resolved');
-    var data = {
-      id: 'testhex',
-      input: req.body.lookupInput
-    }
-
-    var lines = data.input.split('\n');
-    lines = _.filter(lines, function (i) {
-      return i.trim().length;
-    });
-
-    res.locals.page = {title: 'Results'};
-    res.locals.results = lines;
-    res.locals.data = data;
-    res.render('pages/results')
-
-    // res.redirect(`/results/${data.id}`);
-  }
+  handler: require('./resolve-post')
 });
 
 routes.push({
