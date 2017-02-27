@@ -2,20 +2,23 @@
 
 <p>A small utility to extract data from various resources on the Internet.</p>
 
+<p>It's like Clearly or Instapaper but for all sorts of resources.</p>
+
 <h3>Privacy</h3>
 
-<p><strong>How much is captured?</strong></p>
-<p>Not much really. URLGent doesn't set a cookie
-  in your browser or track you in any other way. Your personally identifiable information
+<p><strong>How much of your data is captured?</strong></p>
+<p>Nothing really. URLGent doesn't set a cookie in your browser
+  or track you in any other way. There is no session attached to you
+  and your personally identifiable information
   (including IP, location, browser, etc) is not captured at any point.</p>
 
 <p><strong>What is stored?</strong></p>
 <ul>
   <li>a generalised event log (accessible on <a href="/stats">Stats</a> page)</li>
-  <li>60 minute history of all lookups made and their results (but not who made those requests) *
-    <br />
-    [* In the alpha development stage the cleanup will only happen manually so
-    the history may remain for longer period of time. The 60 minute timeout target may change in the future.]
-  </li>
+  <li>60 minute* cache of all lookups made and their results (but not who made those requests)</li>
 </ul>
+
+<p><small>* In early development the cleanup will be triggered manually
+  so cache may remain in place for longer periods of time.</small><p>
+
 <p>That's it. I just need to have a general idea about usage level.<p>

@@ -25,7 +25,7 @@ routes.push({
   handler: function (req, res) {
     const requestLog = Helpers.getJson('../requestlog');
     res.locals.page = {title: 'Stats'};
-    res.locals.stats = JSON.stringify(requestLog, null, 2);
+    res.locals.stats = requestLog;
     Helpers.logRequest('Info page view');
     res.render('pages/stats');
   }

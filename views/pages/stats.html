@@ -1,3 +1,12 @@
 <h2>Stats</h2>
 
-<pre>{{stats}}</pre>
+
+{{#each stats}}
+  <strong>{{@key}}</strong>
+  <ul>
+    {{#each this}}
+    <li><strong>{{@key}}:</strong> {{this}}</li>
+    {{/each}}
+  </ul>
+{{/each}}
+</ul>
