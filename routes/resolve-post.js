@@ -4,7 +4,7 @@ var resolvers = require('remotestack/resolvers');
 var async = require('async');
 
 module.exports = function (req, res) {
-  Helpers.logRequest('URL resolved');
+  Helpers.logRequest('URL resolution request');
   var data = {
     id: 'testhex',
     input: req.body.lookupInput
@@ -18,8 +18,10 @@ module.exports = function (req, res) {
   var lookupResults = [];
 
   async.each(lines, function (line, cb) {
+    Helpers.logRequest('URL resolution request');
     resolvers(line, {}, function (data) {
       lookupResults.push(data);
+      Helpers.logRequest('URL resolved');
       cb();
     })
   }, function () {

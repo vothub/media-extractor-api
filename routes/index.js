@@ -24,8 +24,15 @@ routes.push({
   path: '/stats',
   handler: function (req, res) {
     const requestLog = Helpers.getJson('../requestlog');
+    let rtn = {};
+    _.each(requestLog, function (val, key) {
+      var total = _.sum(_.map(val));
+      rtn[key] = total;
+    })
+
     res.locals.page = {title: 'Stats'};
-    res.locals.stats = requestLog;
+    res.locals.stats = rtn;
+
     Helpers.logRequest('Info page view');
     res.render('pages/stats');
   }

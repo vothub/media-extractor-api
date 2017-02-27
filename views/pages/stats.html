@@ -1,12 +1,15 @@
 <h2>Stats</h2>
+<br /><br />
 
+<div class="container">
+  <div class="row">
 
-{{#each stats}}
-  <strong>{{@key}}</strong>
-  <ul>
-    {{#each this}}
-    <li><strong>{{@key}}:</strong> {{this}}</li>
+    {{#each stats}}
+      <div class="col-xs-3 text-center" style="height:120px; margin: 10px 0">
+        <p style="font-size: 22px; font-weight:300">{{this}}</p>
+        {{@key}}
+      </div>
     {{/each}}
-  </ul>
-{{/each}}
-</ul>
+
+  </div>
+</div>
