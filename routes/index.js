@@ -66,16 +66,7 @@ routes.push({
 //   }
 // });
 
-// routes.push({
-//   method: 'GET',
-//   path: '/api',
-//   handler: function (req, res) {
-//     res.locals.page = {title: 'API', body: `API description here` };
-//     Helpers.logRequest('Info page view');
-//     res.render('pages/info');
-//   }
-// });
-// routes = routes.concat(require('./api'));
+routes = routes.concat(require('./api'));
 
 function registerRoutes(app, routesArray) {
   for (var i = 0; i < routesArray.length; i++) {

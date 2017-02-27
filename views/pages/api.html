@@ -1,0 +1,27 @@
+<h2>API</h2>
+
+<p>This API provides just one endpoint at the moment as that's all I need for now.</p>
+<p>You can connect to it using regular HTTP GETs</p>
+<p>Example: <code>curl http://urlgent.com/api/v1/resolve?url=http://example.com</code>.</p>
+<p>Throttling may apply.</p>
+
+<table class="table" width="100%">
+  <tr>
+    <td>
+      <span class="label label-primary">GET</span>
+      <code>/api/v1/resolve</code>
+      <br /><br />
+
+      <strong>Params:</strong>
+      <br />
+
+      <ul>
+        <li>url</li>
+        <li>resolver (optional)</li>
+      </ul>
+    </td>
+    <td>
+      Fetches information about given URL
+    </td>
+  </tr>
+</table>
