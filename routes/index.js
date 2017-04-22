@@ -28,7 +28,7 @@ routes.push({
     _.each(requestLog, function (val, key) {
       var total = _.sum(_.map(val));
       rtn[key] = total;
-    })
+    });
 
     res.locals.page = {title: 'Stats'};
     res.locals.stats = rtn;
