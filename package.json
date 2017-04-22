@@ -16,6 +16,6 @@
     "fs-extra": "^2.0.0",
     "hbs": "^4.0.1",
     "lodash": "^4.17.4",
-    "remotestack": "0.0.2"
+    "remotestack": "0.0.3"
   }
 }

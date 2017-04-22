@@ -18,10 +18,9 @@ module.exports = function (req, res) {
   var lookupResults = [];
 
   async.each(lines, function (line, cb) {
-    Helpers.logRequest('URL resolution request');
     resolvers(line, {}, function (data) {
       lookupResults.push(data);
-      Helpers.logRequest('URL resolved');
+      Helpers.logRequest('URL resolved (Web)');
       cb();
     })
   }, function () {
