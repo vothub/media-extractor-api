@@ -1,17 +1,22 @@
-<h2>Results</h2>
+<p>
+  <strong>{{data.title}}</strong>
+</p>
 
-<!-- <p>Query ID: <code>{{query.id}}</code></p> -->
+<p>
+  <small>{{data.url}}</small>
+</p>
 
-{{#each results}}
-  <!-- {{this}} -->
+<p>{{data.description}}</p>
 
-  <p><strong><a href="/view/{{this.canonical.id}}">{{this.canonical.title}}</a></strong></p>
-  <p><small>{{this.canonical.url}}</small></p>
-  <br />
-  {{this.canonical.description}}
-  {{#if this.canonical.preferred}}
-    <a href="{{this.canonical.preferred.url}}" target="_blank">Media link</a>
+{{#if data.media}}
+  <p>
+    <strong>Resolved media:</strong>
+  </p>
+
+  {{#if data.media.audio}}
+    <a href="{{data.media.audio.url}}" target="_blank">Audio</a><br />
   {{/if}}
-
-  <br /><br />
-{{/each}}
+  {{#if data.media.video}}
+    <a href="{{data.media.video.url}}" target="_blank">Video</a><br />
+  {{/if}}
+{{/if}}

@@ -1,6 +1,6 @@
-const Helpers = require('../lib/helpers');
 const _ = require('lodash');
-const resolvers = require('remotestack/resolvers');
+const Helpers = require('../lib/helpers');
+const resolvers = require('../lib/resolvers');
 let routes = [];
 
 routes.push({

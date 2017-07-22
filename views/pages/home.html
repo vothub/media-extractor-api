@@ -2,20 +2,24 @@
 
 <div class="navContent" id="lookup">
   <div class="inner padding-10">
-    <form action="/resolve" method="POST">
-    <textarea type="text" id="lookupInput" name="lookupInput" style="height: 150px" class="form-control" placeholder="Insert your URLs here"></textarea>
 
-    <br />
+    <form action="/resolve" method="POST">
+      <div class="form-group">
+        <div class="input-group">
+          <input type="url" class="form-control input-lg" id="lookupInput" name="lookupInput" required placeholder="Insert your URL here">
+          <div class="input-group-addon">
+            <button type="submit" id="lookupGo" class="btn btn-default rs-button-bg">Fetch</button>
+          </div>
+        </div>
+      </div>
+    </form>
 
     <div class="text-center">
-      <button type="submit" id="lookupGo" class="btn btn-default rs-button-bg">Go</button>
+      <br /><br />
+      <a href="https://chrome.google.com/webstore/detail/negdabnedmjkiognhhikoggfbbmpjjmj" target="_blank">
+        Get URLGent Chrome Extension
+      </a>
     </div>
-
-    <br /><br /><br />
-
-    <a href="https://chrome.google.com/webstore/detail/negdabnedmjkiognhhikoggfbbmpjjmj" target="_blank">
-      Get URLGent Chrome Extension
-    </a>
 
   </div>
 </div>
