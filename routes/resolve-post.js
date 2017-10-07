@@ -4,7 +4,6 @@ var Helpers = require('../lib/helpers');
 var resolvers = require('../lib/resolvers');
 
 module.exports = function (req, res) {
-  Helpers.logRequest('URL resolution request');
   var input = (req.body.lookupInput || '').trim();
 
   if (!input.length) {
@@ -12,7 +11,7 @@ module.exports = function (req, res) {
   }
 
   resolvers(input, {ytdl: true}, function (data) {
-    Helpers.logRequest('URL resolved (Web)');
+    Helpers.logRequest('URL resolved');
 
     res.locals.page = {title: 'Results'};
     res.locals.data = data;

@@ -58,7 +58,7 @@ routes.push({
 
     resolvers(url, opts, function (data) {
       // Helpers.logRequest('API v1: URL resolved');
-      Helpers.logRequest('URL resolved (API)');
+      Helpers.logRequest('URL resolved');
       const rtn = _.omit(data, 'errors');
       res.json(rtn);
     });
