@@ -15,6 +15,6 @@ app.set('view engine', 'html');
 
 routes.registerRoutes(app, routes);
 
-app.listen(config.port, function () {
+app.listen(config.port, config.appPublic ? '0' : 'localhost', function () {
   console.log('Listening on port', config.port);
 });

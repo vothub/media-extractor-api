@@ -11,6 +11,7 @@ const portFinal = (portRaw == portParsed) ? portParsed : 4000;
 const config = {
   baseUrl: clOpts.url || clOpts.u || 'http://localhost:' + portFinal,
   port: portFinal,
+  appPublic: clOpts.public ? true : false,
   paths: {
     public: path.join(__dirname, 'public'),
     views: path.join(__dirname, 'views'),
