@@ -10,7 +10,7 @@ module.exports = function (req, res) {
     return res.status(404).send('No URL provided :(');
   }
 
-  resolvers(input, {ytdl: true}, function (data) {
+  resolvers(input, function (data) {
     Helpers.logRequest('URL resolved');
 
     res.locals.page = {title: 'Results'};

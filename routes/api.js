@@ -43,8 +43,7 @@ routes.push({
     }
 
     if (types.indexOf('html') != -1) {
-      opts.raw = true;
-      opts.clean = true;
+      opts.html = true;
     }
 
     if (typeof url !== 'string') {
