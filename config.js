@@ -1,17 +1,37 @@
 const path = require('path');
 const fse = require('fs-extra');
+const os = require('os');
 const hbs = require('hbs');
 const clarg = require('clarg');
 const clOpts = clarg().opts;
 
-const portRaw = clOpts.port || clOpts.p;
-const portParsed = parseInt(portRaw, 10);
-const portFinal = (portRaw == portParsed) ? portParsed : 4000;
+const appPortRaw = clOpts.port || clOpts.p;
+const appPortParsed = parseInt(appPortRaw, 10);
+const appPort = (appPortRaw == appPortParsed) ? appPortParsed : 3000;
+
+const appNetworkRaw = (clOpts.network || clOpts.n || '').trim();
+const appNetwork = ['public', 'private'].indexOf(appNetworkRaw) === -1 ? 'local' : appNetworkRaw;
+
+const networks = {
+  public: '0',
+  private: false,
+  local: '127.0.0.1'
+};
+
+// fixing for DO setup
+const privateInterface = os.networkInterfaces()['eth1'];
+if (privateInterface) {
+  networks.private = _.map(_.find(privateInterface, {family: 'IPv4'}), 'address');
+}
+
+
+const appNetworkInterface = networks[appNetwork];
 
 const config = {
-  baseUrl: clOpts.url || clOpts.u || 'http://localhost:' + portFinal,
-  port: portFinal,
-  appPublic: clOpts.public ? true : false,
+  baseUrl: clOpts.url || clOpts.u || 'http://localhost:' + appPort,
+  appPort,
+  appNetwork,
+  appNetworkInterface,
   paths: {
     public: path.join(__dirname, 'public'),
     views: path.join(__dirname, 'views'),

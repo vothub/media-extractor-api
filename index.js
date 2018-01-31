@@ -15,6 +15,11 @@ app.set('view engine', 'html');
 
 routes.registerRoutes(app, routes);
 
-app.listen(config.port, config.appPublic ? '0' : 'localhost', function () {
+if (config.appNetwork === 'private' && !config.appNetworkInterface) {
+      console.log('Couldnt determine private interface - restricting to localhost');
+      config.appNetworkInterface = '127.0.0.1';
+    }
+    // start app
+    app.listen(config.appPort, config.appNetworkInterface, 0, function () {
   console.log('Listening on port', config.port);
 });

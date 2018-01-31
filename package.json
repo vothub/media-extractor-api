@@ -1,6 +1,6 @@
 {
   "name": "urlgent",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "URLGent API",
   "main": "index.js",
   "repository": {
