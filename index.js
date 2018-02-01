@@ -21,5 +21,5 @@ if (config.appNetwork === 'private' && !config.appNetworkInterface) {
     }
     // start app
     app.listen(config.appPort, config.appNetworkInterface, 0, function () {
-  console.log('Listening on port', config.port);
+  console.log('URLGent listening on port', config.appPort);
 });
