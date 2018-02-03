@@ -10,7 +10,7 @@ The application running at urlgent.com.
 - New API
 - Job workflow
 - Better, shareable URLs
-- Piping media to prevent tracking of your IP
+- Proxy for media files to prevent tracking of your IP
 - Simpler routes system
 
 **1.0.2**
