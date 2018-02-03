@@ -1,6 +1,7 @@
 {{#unless data}}
   {{#if exists}}
-    <p class="text-center">Your request is being processed. Please refresh your page in a few seonds.</p>
+    <p class="text-center">Your request is being processed. Please wait.</p>
+    <meta http-equiv="refresh" content="1">
   {{else}}
     <p class="text-center">This request does not exist.</p>
   {{/if}}
@@ -14,14 +15,14 @@
 
   {{#if data.media}}
     {{#if data.media.audio}}
-    <a href="/api/v2/stream/{{id}}/audio/view" class="btn btn-md btn-success" target="_blank">Audio (private)</a> &nbsp; &nbsp;
-      <a href="{{data.media.audio.url}}" class="btn btn-md" target="_blank">Audio (direct link)</a>
+    <a href="{{data.media.audio.urlProxied}}" class="btn btn-md btn-success" target="_blank">Audio (private)</a> &nbsp; &nbsp;
+      <a href="{{data.media.audio.urlRaw}}" class="btn btn-md" target="_blank">Audio (direct link)</a>
       <br /><br />
     {{/if}}
 
     {{#if data.media.video}}
-    <a href="/api/v2/stream/{{id}}/video/view" class="btn btn-md btn-success" target="_blank">Video (private)</a> &nbsp; &nbsp;
-      <a href="{{data.media.video.url}}" class="btn btn-md btn-default" target="_blank">Video (direct link)</a>
+    <a href="{{data.media.video.urlProxied}}" class="btn btn-md btn-success" target="_blank">Video (private)</a> &nbsp; &nbsp;
+      <a href="{{data.media.video.urlRaw}}" class="btn btn-md btn-default" target="_blank">Video (direct link)</a>
       <br /><br />
     {{/if}}
   {{/if}}

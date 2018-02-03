@@ -1,51 +1,23 @@
-<h3>API v1</h3>
-
-<p>In API v1 the whole lifecycle is packed into a single request.
-  This may be preferred in some circumstances.</p>
-
-<br />
-
-<table class="table" width="100%">
-  <tr>
-    <td width="380">
-      <span class="label label-primary">GET</span>
-      <code>/api/v1/resolve</code>
-      <br /><br />
-
-      <strong>Params:</strong>
-      <br />
-
-      <ul>
-        <li>url</li>
-        <li>type ('html' or 'media')</li>
-      </ul>
-    </td>
-    <td>
-      Fetches information about given URL.
-      <br /><br />
-      <strong>Example</strong><br />
-      <code>curl http://urlgent.com/api/v1/resolve?url=https:\/\/www.youtube.com\/watch\?v=C0DPdy98e4c&type=media</code>
-    </td>
-  </tr>
-</table>
-
-<br />
-
+<!-- API v2 -->
 <h3>API v2</h3>
 
-<p>In API v2 uses a job concept and breaks the process into three distinct parts.</p>
-<ol>
-  <li>Pass <code>url</code> and <code>type</code> to <code>create</code> endpoint.</li>
-  <li>Look it up the results through <code>get</code> endpoint.</li>
-  <li>Use the provided URL directly or through <code>stream</code> endpoint to prevent tracking when rendering embedded video.</li>
-</ol>
+<p>API v2 uses a job delegation concept and breaks the process into distinct steps.</p>
+
+<p>
+  <strong>Example workflow:</strong>
+  <ol>
+    <li>POST <code>{ url, type }</code> to <code>create</code> endpoint.</li>
+    <li>Retrieve the results through <code>get</code> endpoint.</li>
+    <li>Use the link to <code>stream</code> endpoint (provided in the response) to proxy the video.</li>
+  </ol>
+</p>
 
 <br />
 
 <table class="table" width="100%">
   <tr>
     <td width="380">
-      <span class="label label-primary">GET</span>
+      <span class="label label-warning">POST</span>
       <code>/api/v2/create</code>
       <br /><br />
 
@@ -54,7 +26,7 @@
 
       <ul>
         <li>url</li>
-        <li>type ('html' or 'media')</li>
+        <li>type (currently only 'media' is supported)</li>
       </ul>
     </td>
     <td>
@@ -83,7 +55,7 @@
   <tr>
     <td>
       <span class="label label-primary">GET</span>
-      <code>/api/v2/stream/:id/:type/:nicename</code>
+      <code>/api/v2/stream/:id/:type</code>
       <br /><br />
 
       <strong>Params:</strong>
@@ -92,11 +64,57 @@
       <ul>
         <li>id</li>
         <li>type ('audio' or 'video')</li>
-        <li>nicename (optional)</li>
       </ul>
     </td>
     <td>
-      Pipes the audio or video file to users browser to maintain privacy
+      Pipes the audio or video file to users browser.<br />
+      Prevents tracking user's IP when rendering resource in your application.
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      <span class="label label-primary">GET</span>
+      <code>/api/v2/stats</code>
+    <td>
+      Returns data about all logged events (broken down by event type and day).
+    </td>
+  </tr>
+
+</table>
+
+
+<br />
+<br />
+
+<!-- API v1 -->
+<h3>API v1</h3>
+
+<p>In API v1 the whole lifecycle is packed into a single request.
+  This may be preferred in some circumstances.</p>
+
+<br />
+
+<table class="table" width="100%">
+  <tr>
+    <td width="380">
+      <span class="label label-primary">GET</span>
+      <code>/api/v1/resolve</code>
+      <br /><br />
+
+      <strong>Params:</strong>
+      <br />
+
+      <ul>
+        <li>url</li>
+        <li>type ('html' or 'media')</li>
+      </ul>
+    </td>
+    <td>
+      Fetches information about given URL.
+      <br /><br />
+      <strong>Example</strong><br />
+      <code>curl http://urlgent.com/api/v1/resolve?url=https:\/\/www.youtube.com\/watch\?v=C0DPdy98e4c&type=media</code>
     </td>
   </tr>
 </table>
