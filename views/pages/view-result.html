@@ -15,21 +15,19 @@
   {{#if data.media}}
     {{#if data.media.audio}}
     <a href="/api/v2/stream/{{id}}/audio/view" class="btn btn-md btn-success" target="_blank">Audio (private)</a> &nbsp; &nbsp;
-      <a href="{{data.media.audio.url}}" class="btn btn-sm" target="_blank">Audio (direct link)</a>
+      <a href="{{data.media.audio.url}}" class="btn btn-md" target="_blank">Audio (direct link)</a>
       <br /><br />
     {{/if}}
 
     {{#if data.media.video}}
     <a href="/api/v2/stream/{{id}}/video/view" class="btn btn-md btn-success" target="_blank">Video (private)</a> &nbsp; &nbsp;
-      <a href="{{data.media.video.url}}" class="btn btn-sm btn-default" target="_blank">Video (direct link)</a>
+      <a href="{{data.media.video.url}}" class="btn btn-md btn-default" target="_blank">Video (direct link)</a>
       <br /><br />
     {{/if}}
   {{/if}}
 
   <br />
 
-  <strong>Description:</strong>
-  <br />
-  <p>{{{data.description}}}</p>
+  <p class="dim">{{{data.description}}}</p>
 
 {{/unless}}

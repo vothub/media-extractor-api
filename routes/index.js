@@ -10,7 +10,7 @@ function routes(app) {
 
   app.get('/', function (req, res) {
     Helpers.logRequest('PAGE_VIEW');
-    res.locals.page = { title: 'URLGent. Because privacy.' };
+    res.locals.pageTitle = 'URLGent. Because privacy.';
     res.render('pages/home');
   });
 
@@ -23,7 +23,7 @@ function routes(app) {
       rtn[key] = total;
     });
 
-    res.locals.page = {title: 'Usage stats - URLGent'};
+    res.locals.pageTitle = 'Usage stats - URLGent';
     res.locals.stats = rtn;
 
     res.render('pages/stats');
@@ -31,7 +31,7 @@ function routes(app) {
 
   app.get('/about', function (req, res) {
     Helpers.logRequest('PAGE_VIEW');
-    res.locals.page = {title: 'About - URLGent'};
+    res.locals.pageTitle = 'About - URLGent';
     res.render('pages/about');
   });
 
@@ -54,9 +54,12 @@ function routes(app) {
     Helpers.logRequest('URL_RESOLUTION_VIEW_WEB');
     const id = req.params.id;
     let job = JobLib.get(id);
+    if (job && job.data && job.data.description) {
+      job.data.description = job.data.description.replace(/\n/g, '<br />');
+    }
 
     if (job) {
-      res.locals.page = {title: (_.get(job, 'data.title', 'Resolving')) + ' - URLGent'};
+      res.locals.pageTitle = _.get(job, 'data.title', 'Resolving') + ' - URLGent';
       res.locals.data = _.get(job, 'data');
       res.locals.id = _.get(job, 'id');
       res.locals.exists = true;
@@ -77,7 +80,7 @@ function routes(app) {
   // api landing page
   app.get('/api', function (req, res) {
     Helpers.logRequest('PAGE_VIEW');
-    res.locals.page = {title: 'API - URLGent'};
+    res.locals.pageTitle = 'API - URLGent';
     res.render('pages/api');
   });
 
