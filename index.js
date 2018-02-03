@@ -18,7 +18,7 @@ function startApp () {
   routes(app);
 
   if (config.appNetwork === 'private' && !config.appNetworkInterface) {
-    console.log('Couldnt determine private interface - restricting to localhost');
+    console.log('Couldn\'t determine private interface - restricting to localhost');
     config.appNetworkInterface = '127.0.0.1';
   }
 
