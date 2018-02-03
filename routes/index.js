@@ -1,30 +1,21 @@
 const Helpers = require('../lib/helpers');
 const resolvers = require('../lib/resolvers');
+const JobLib = require('../lib/job');
 const express = require('express');
 const _ = require('lodash');
-let routes = [];
 
-routes.push({
-  method: 'USE',
-  path: '/public',
-  handler: express.static('public')
-});
+function routes(app) {
+  app.use('/public', express.static('public'));
 
-routes.push({
-  method: 'GET',
-  path: '/',
-  handler: function (req, res) {
+  app.get('/', function (req, res) {
+    Helpers.logRequest('PAGE_VIEW');
     res.locals.page = { title: 'Welcome to URLGent' };
-    Helpers.logRequest('Homepage view');
     res.render('pages/home');
-  }
-});
+  });
 
-routes.push({
-  method: 'GET',
-  path: '/stats',
-  handler: function (req, res) {
+  app.get('/stats', function (req, res) {
     const requestLog = Helpers.getJson('../requestlog');
+    Helpers.logRequest('PAGE_VIEW');
     let rtn = {};
     _.each(requestLog, function (val, key) {
       var total = _.sum(_.map(val));
@@ -34,77 +25,43 @@ routes.push({
     res.locals.page = {title: 'Stats'};
     res.locals.stats = rtn;
 
-    Helpers.logRequest('Info page view');
     res.render('pages/stats');
-  }
-});
+  });
 
-
-routes.push({
-  method: 'GET',
-  path: '/about',
-  handler: function (req, res) {
-    Helpers.logRequest('Info page view');
+  app.get('/about', function (req, res) {
+    Helpers.logRequest('PAGE_VIEW');
     res.render('pages/about');
-  }
-});
+  });
 
-routes.push({
-  method: 'POST',
-  path: '/resolve',
-  handler: require('./resolve-post')
-});
+  // demo
+  app.post('/create', function (req, res) {
+    Helpers.logRequest('URL_RESOLUTION_REQUEST_WEB');
+    require('./create')(req, res);
+  });
 
-routes.push({
-  method: 'GET',
-  path: '/results',
-  handler: function (req, res) {
-    res.redirect(`/`);
-  }
-});
+  app.get('/view/:id', function (req, res) {
+    Helpers.logRequest('URL_RESOLUTION_VIEW');
+    const id = req.params.id;
+    var job = JobLib.get(id);
+    res.render('pages/results', {data: job});
+  });
 
-// routes.push({
-//   method: 'GET',
-//   path: '/results/:id',
-//   handler: function (req, res) {
-//     res.locals.page = {title: 'Results'};
-//     res.locals.results = [];
-//     res.locals.query = {id: req.params.id}
-//     res.render('pages/results');
-//   }
-// });
-
-
-
-
-
-routes.push({
-  method: 'USE',
-  path: '/api',
-  handler: function(req, res, next) {
+  // api
+  app.use('/api', function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET,POST');
     res.header('Access-Control-Allow-Headers', 'Content-Type');
 
     next();
-  }
-});
+  });
 
-routes.push({
-  method: 'GET',
-  path: '/api',
-  handler: function (req, res) {
+  app.get('/api', function (req, res) {
+    Helpers.logRequest('PAGE_VIEW');
     res.locals.page = {title: 'API'};
-    // Helpers.logRequest('API: Homepage');
     res.render('pages/api');
-  }
-});
+  });
 
-routes.push({
-  method: 'GET',
-  path: '/api/v1/resolve',
-  handler: function (req, res) {
-    // Helpers.logRequest('API v1: URL resolution request');
+  app.get('/api/v1/resolve', function (req, res) {
     const types = typeof req.query.type === 'string' ? req.query.type.split(',') : [];
     let url = req.query.url;
     let opts = {
@@ -122,37 +79,23 @@ routes.push({
     }
 
     if (typeof url !== 'string') {
+      Helpers.logRequest('URL_RESOLUTION_REQUEST_ERR');
       return res.json({error: 'Invalid URL'});
     }
     url = url.trim();
 
     if (url.length < 1 || url.indexOf('http') !== 0) {
+      Helpers.logRequest('URL_RESOLUTION_REQUEST_ERR');
       return res.json({error: 'Invalid URL'});
     }
 
+    Helpers.logRequest('URL_RESOLUTION_REQUEST_API');
+
     resolvers(url, opts, function (data) {
-      // Helpers.logRequest('API v1: URL resolved');
-      Helpers.logRequest('URL resolved');
       const rtn = _.omit(data, 'errors');
       res.json(rtn);
     });
-  }
-});
-
-
-
-
-
-
-
-function registerRoutes(app, routesArray) {
-  for (var i = 0; i < routesArray.length; i++) {
-    var currentRoute = routesArray[i];
-    // console.log('Registering route:', currentRoute.method, currentRoute.path);
-
-    app[currentRoute.method.toLowerCase()](currentRoute.path, currentRoute.handler);
-  }
+  });
 }
 
 module.exports = routes;
-module.exports.registerRoutes = registerRoutes;

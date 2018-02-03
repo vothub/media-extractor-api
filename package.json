@@ -1,6 +1,6 @@
 {
   "name": "urlgent",
-  "version": "1.0.2",
+  "version": "2.0.0",
   "description": "URLGent API",
   "main": "index.js",
   "repository": {
@@ -20,7 +20,7 @@
     "lodash": "^4.17.4",
     "request": "^2.76.0",
     "unfluff": "^1.1.0",
-    "uuid": "^2.0.3",
+    "uuid": "^3.2.1",
     "youtube-dl": "^1.11.1"
   }
 }
