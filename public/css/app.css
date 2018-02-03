@@ -1,17 +1,16 @@
+html {position: relative; min-height: 100%;}
+body {padding-top: 40px}
+h1, h2, h3 {text-align: center}
 h1 {font-size: 30px; font-weight: 300;}
 h2 {font-size: 18px; font-weight: 300;}
-html {position: relative; min-height: 100%;}
-body {margin-bottom: 40px;}
 h1 a, h1 a:hover, h1 a:focus {color: black; text-decoration: none}
+h1 img.icon {top: -3px; position: relative; height: 46px;}
 
-.footer {
-  position: absolute; bottom: 0; width: 100%; height: 40px; background-color: #f5f5f5;
-}
-
-.footer .container {line-height: 40px}
-.footer, .footer span {color: #AAA}
-.footer a {color: #888; margin: 0 5px;}
-.footer a:hover, .footer a:focus, .footer a:active {color: #333;}
+.header {position: fixed; top: 0; width: 100%; height: 40px; background-color: #444;}
+.header .container-fluid {line-height: 40px}
+.header, .header span {color: #888}
+.header a {color: #AAA; margin: 0 5px; text-decoration: none}
+.header a:hover, .header a:focus, .header a:active {color: #CCC;}
 
 .input-group-addon {padding: 0}
-.rs-button-bg {background: none; border:none; padding: 12px}
+.input-group-addon button {border-radius: 0 5px 5px 0; margin-right: -3px; margin-top: -1px; font-weight: 300}

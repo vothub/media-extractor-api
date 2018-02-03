@@ -10,7 +10,7 @@ function routes(app) {
 
   app.get('/', function (req, res) {
     Helpers.logRequest('PAGE_VIEW');
-    res.locals.page = { title: 'Welcome to URLGent' };
+    res.locals.page = { title: 'URLGent. Because privacy.' };
     res.render('pages/home');
   });
 
@@ -23,7 +23,7 @@ function routes(app) {
       rtn[key] = total;
     });
 
-    res.locals.page = {title: 'Stats'};
+    res.locals.page = {title: 'Usage stats - URLGent'};
     res.locals.stats = rtn;
 
     res.render('pages/stats');
@@ -31,13 +31,23 @@ function routes(app) {
 
   app.get('/about', function (req, res) {
     Helpers.logRequest('PAGE_VIEW');
+    res.locals.page = {title: 'About - URLGent'};
     res.render('pages/about');
   });
 
   // demo
   app.post('/create', function (req, res) {
     Helpers.logRequest('URL_RESOLUTION_REQUEST_WEB');
-    require('./create')(req, res);
+    var inputUrl = (req.body.lookupInput || '').trim();
+
+    if (!inputUrl.length) {
+      return res.status(404).send('No URL provided.');
+    }
+    var jobData = {url: inputUrl, opts: {ytdl: true}};
+
+    const jobId = JobLib.create(jobData);
+    JobLib.start(jobId);
+    res.redirect('/view/' + jobId);
   });
 
   app.get('/view/:id', function (req, res) {
@@ -46,13 +56,13 @@ function routes(app) {
     let job = JobLib.get(id);
 
     if (job) {
-      res.locals.page = {title: 'URLGent: ' + (_.get(job, 'data.title', 'Resolving'))};
+      res.locals.page = {title: (_.get(job, 'data.title', 'Resolving')) + ' - URLGent'};
       res.locals.data = _.get(job, 'data');
       res.locals.id = _.get(job, 'id');
       res.locals.exists = true;
     }
 
-    res.render('pages/results');
+    res.render('pages/view-result');
   });
 
   // api middleware
@@ -67,7 +77,7 @@ function routes(app) {
   // api landing page
   app.get('/api', function (req, res) {
     Helpers.logRequest('PAGE_VIEW');
-    res.locals.page = {title: 'API'};
+    res.locals.page = {title: 'API - URLGent'};
     res.render('pages/api');
   });
 
@@ -77,13 +87,13 @@ function routes(app) {
     var inputUrl = (req.body.lookupInput || '').trim();
 
     if (!inputUrl.length) {
-      return res.status(404).send('No URL provided :(');
+      return res.status(404).json({error: 'No URL provided.'});
     }
     var jobData = {url: inputUrl, opts: {ytdl: true}};
 
-    const jobId = jobLib.create(jobData);
-    jobLib.start(jobId);
-    res.redirect('/view/' + jobId);
+    const jobId = JobLib.create(jobData);
+    JobLib.start(jobId);
+    res.json({id: jobId});
   });
 
   // api v2 get
