@@ -1,26 +1,35 @@
-<p>
-  <strong>{{data.title}}</strong>
-</p>
+{{#unless data}}
+  {{#if exists}}
+    <p class="text-center">Your request is being processed. Please refresh your page in a moment.</p>
+  {{else}}
+    <p class="text-center">This request does not exist.</p>
+  {{/if}}
+{{else}}
 
-<p>
-  <small>{{data.url}}</small>
-</p>
+  <p><strong>{{data.title}}</strong></p>
 
-<br />
+  <p><small>{{data.url}}</small></p>
 
-{{#if data.media}}
-  {{#if data.media.audio}}
-    <a href="{{data.media.audio.url}}" class="btn btn-md btn-success" target="_blank">Audio &rsaquo;</a><br />
+  <br />
+
+  {{#if data.media}}
+    {{#if data.media.audio}}
+    <a href="/api/v2/stream/{{id}}/audio/view" class="btn btn-md btn-success" target="_blank">Audio (private)</a> &nbsp; &nbsp;
+      <a href="{{data.media.audio.url}}" class="btn btn-md" target="_blank">Audio (direct link / unsafe)</a>
+      <br /><br />
+    {{/if}}
+
+    {{#if data.media.video}}
+    <a href="/api/v2/stream/{{id}}/video/view" class="btn btn-md btn-success" target="_blank">Video (private)</a> &nbsp; &nbsp;
+      <a href="{{data.media.video.url}}" class="btn btn-md btn-default" target="_blank">Video (direct link / unsafe)</a>
+      <br /><br />
+    {{/if}}
   {{/if}}
 
-  {{#if data.media.video}}
-    <a href="{{data.media.video.url}}" class="btn btn-md btn-primary" target="_blank">Video &rsaquo;</a><br />
-  {{/if}}
-{{/if}}
+  <br />
 
-<br />
-<br />
+  <strong>Description:</strong>
+  <br />
+  <p>{{{data.description}}}</p>
 
-<strong>Description:</strong>
-<br />
-<p>{{{data.description}}}</p>
+{{/unless}}
