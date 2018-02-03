@@ -1,0 +1,34 @@
+{{#unless data}}
+  {{#if exists}}
+    <p class="text-center">Your request is being processed. Please wait.</p>
+    <meta http-equiv="refresh" content="1">
+  {{else}}
+    <p class="text-center">This request does not exist.</p>
+  {{/if}}
+{{else}}
+
+  <p><strong>{{data.title}}</strong></p>
+
+  <p><small>{{data.url}}</small></p>
+
+  <br />
+
+  {{#if data.media}}
+    {{#if data.media.audio}}
+    <a href="{{data.media.audio.urlProxied}}" class="btn btn-md btn-success" target="_blank">Audio (private)</a> &nbsp; &nbsp;
+      <a href="{{data.media.audio.urlRaw}}" class="btn btn-md" target="_blank">Audio (direct link)</a>
+      <br /><br />
+    {{/if}}
+
+    {{#if data.media.video}}
+    <a href="{{data.media.video.urlProxied}}" class="btn btn-md btn-success" target="_blank">Video (private)</a> &nbsp; &nbsp;
+      <a href="{{data.media.video.urlRaw}}" class="btn btn-md btn-default" target="_blank">Video (direct link)</a>
+      <br /><br />
+    {{/if}}
+  {{/if}}
+
+  <br />
+
+  <p class="dim">{{{data.description}}}</p>
+
+{{/unless}}

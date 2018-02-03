@@ -1,24 +1,34 @@
-<h2>About URLGent</h2>
+<h3>About URLGent</h3>
 
-<p>A small utility to extract data from various resources on the Internet.</p>
+<p>A small utility to connect you directly to various videos and audio clips on the Internet.</p>
 
 <p>It's like Clearly or Instapaper but for all sorts of resources.</p>
+
+<p>The primary goal is privacy - you only connect to URLGent servers when
+  looking up or viewing a video/audio resource.</p>
+
+<p>It also removes bloat that the media sites generally put around the content.
+  This translates to lower memory usage and longer battery life by scaling down
+  on the resources necessary to render the content.</p>
 
 <h3>Privacy</h3>
 
 <p><strong>How much of your data is captured?</strong></p>
-<p>Nothing really. URLGent doesn't set a cookie in your browser
-  or track you in any other way. There is no session attached to you
-  and your personally identifiable information
-  (including IP, location, browser, etc) is not captured at any point.</p>
+<p>
+  Nothing really.
+  URLGent doesn't set a cookie in your browser or track you in any other way.
+  There is no session attached to you and your personally identifiable information
+  (IP, location, browser used, etc) is not captured at any point.
+</p>
+<p>
+  In addition to that no files are ever physically stored on the server.
+  Everything is simply streamed from the original location of the data.
+</p>
 
 <p><strong>What is stored?</strong></p>
 <ul>
-  <li>a generalised event log (accessible on <a href="/stats">Stats</a> page)</li>
-  <li>60 minute* cache of all lookups made and their results (but not who made those requests)</li>
+  <li>a generalised event log (summarised numbers of hits - see <a href="/stats">Stats</a> page)</li>
+  <li>history of lookups in process memory (but not who made those requests; removed when application gets restarted)</li>
 </ul>
 
-<p><small>* In early development the cleanup will be triggered manually
-  so cache may remain in place for longer periods of time.</small><p>
-
-<p>That's it. I just need to have a general idea about usage level.<p>
+<p>HTTPS coming soon - sorry about the delay :)</p>

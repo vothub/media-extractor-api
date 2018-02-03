@@ -1,110 +1,201 @@
 const Helpers = require('../lib/helpers');
 const resolvers = require('../lib/resolvers');
+const JobLib = require('../lib/job');
 const express = require('express');
 const _ = require('lodash');
-let routes = [];
+const request = require('request');
 
-routes.push({
-  method: 'USE',
-  path: '/public',
-  handler: express.static('public')
-});
+function routes(app) {
+  /**
+   * Web
+   * Public dir
+   */
+  app.use('/public', express.static('public'));
 
-routes.push({
-  method: 'GET',
-  path: '/',
-  handler: function (req, res) {
-    res.locals.page = { title: 'Welcome to URLGent' };
-    Helpers.logRequest('Homepage view');
+  /**
+   * Web
+   * Homepage
+   */
+  app.get('/', function (req, res) {
+    Helpers.logRequest('PAGE_VIEW');
+    res.locals.pageTitle = 'URLGent. Because privacy.';
     res.render('pages/home');
-  }
-});
+  });
 
-routes.push({
-  method: 'GET',
-  path: '/stats',
-  handler: function (req, res) {
-    const requestLog = Helpers.getJson('../requestlog');
+  /**
+   * Web
+   * Info page about API
+   */
+  app.get('/api', function (req, res) {
+    Helpers.logRequest('PAGE_VIEW');
+    res.locals.pageTitle = 'API - URLGent';
+    res.render('pages/api');
+  });
+
+
+  /**
+   * Web
+   * Stats page
+   */
+  app.get('/stats', function (req, res) {
+    const requestLogData = Helpers.getJson('../requestlog');
+    Helpers.logRequest('PAGE_VIEW');
     let rtn = {};
-    _.each(requestLog, function (val, key) {
-      var total = _.sum(_.map(val));
+    _.each(requestLogData, function (val, key) {
+      const total = _.sum(_.map(val));
       rtn[key] = total;
     });
 
-    res.locals.page = {title: 'Stats'};
+    res.locals.pageTitle = 'Usage stats - URLGent';
     res.locals.stats = rtn;
 
-    Helpers.logRequest('Info page view');
     res.render('pages/stats');
-  }
-});
+  });
 
-
-routes.push({
-  method: 'GET',
-  path: '/about',
-  handler: function (req, res) {
-    Helpers.logRequest('Info page view');
+  /**
+   * Web
+   * About page
+   */
+  app.get('/about', function (req, res) {
+    Helpers.logRequest('PAGE_VIEW');
+    res.locals.pageTitle = 'About - URLGent';
     res.render('pages/about');
-  }
-});
+  });
 
-routes.push({
-  method: 'POST',
-  path: '/resolve',
-  handler: require('./resolve-post')
-});
+  /**
+   * Web
+   * Create a lookup request
+   * Redirects to lookup results page
+   */
+  app.post('/create', function (req, res) {
+    Helpers.logRequest('URL_LOOKUP_REQUEST_WEB');
+    const inputUrl = (req.body.url || '').trim();
 
-routes.push({
-  method: 'GET',
-  path: '/results',
-  handler: function (req, res) {
-    res.redirect(`/`);
-  }
-});
+    if (!inputUrl.length) {
+      return res.status(412).send('No URL provided.');
+    }
 
-// routes.push({
-//   method: 'GET',
-//   path: '/results/:id',
-//   handler: function (req, res) {
-//     res.locals.page = {title: 'Results'};
-//     res.locals.results = [];
-//     res.locals.query = {id: req.params.id}
-//     res.render('pages/results');
-//   }
-// });
+    const jobData = {url: inputUrl, opts: {ytdl: true}};
+    const jobId = JobLib.create(jobData);
+
+    JobLib.start(jobId);
+    res.redirect('/view/' + jobId);
+  });
+
+  /**
+   * Web
+   * Lookup results page
+   */
+  app.get('/view/:id', function (req, res) {
+    Helpers.logRequest('URL_LOOKUP_RESULT_WEB');
+    const id = req.params.id;
+    const job = JobLib.get(id);
+    if (job && job.data && job.data.description) {
+      job.data.description = job.data.description.replace(/\n/g, '<br />');
+    }
+
+    if (job) {
+      // bind data to page
+      res.locals.pageTitle = _.get(job, 'data.title', 'Resolving') + ' - URLGent';
+      res.locals.data = _.get(job, 'data');
+      res.locals.id = _.get(job, 'id');
+      res.locals.exists = true;
+    }
+
+    res.render('pages/view-result');
+  });
 
 
 
-
-
-routes.push({
-  method: 'USE',
-  path: '/api',
-  handler: function(req, res, next) {
+  /**
+   * API
+   * Middleware
+   */
+  app.use('/api', function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET,POST');
     res.header('Access-Control-Allow-Headers', 'Content-Type');
 
     next();
-  }
-});
+  });
 
-routes.push({
-  method: 'GET',
-  path: '/api',
-  handler: function (req, res) {
-    res.locals.page = {title: 'API'};
-    // Helpers.logRequest('API: Homepage');
-    res.render('pages/api');
-  }
-});
+  /**
+   * API v2
+   * POST /create
+   */
+  app.post('/api/v2/create', function (req, res) {
+    Helpers.logRequest('URL_LOOKUP_REQUEST_API');
+    const inputUrl = (req.body.url || '').trim();
+    const inputType = (req.body.type || 'media').trim();
 
-routes.push({
-  method: 'GET',
-  path: '/api/v1/resolve',
-  handler: function (req, res) {
-    // Helpers.logRequest('API v1: URL resolution request');
+    if (!inputUrl.length) {
+      return res.status(404).json({error: 'No URL provided.'});
+    }
+
+    if (inputType !== 'media') {
+      return res.status(412).send('The only supported "type" is "media".');
+    }
+
+    const jobData = {url: inputUrl, opts: {ytdl: true}};
+    const jobId = JobLib.create(jobData);
+
+    JobLib.start(jobId);
+    res.json({id: jobId, url: '/api/v2/get/' + jobId});
+  });
+
+  /**
+   * API v2
+   * GET /get/:id
+   */
+  app.get('/api/v2/get/:id', function (req, res) {
+    Helpers.logRequest('URL_LOOKUP_RESULT_API');
+    const id = req.params.id;
+    let job = JobLib.get(id);
+
+    if (!job || !Object.keys(job).length) {
+      return res.status(404).send('Job not found.');
+    }
+
+    res.json(job);
+  });
+
+  /**
+   * API v2
+   * GET /stream/:id/:type
+   */
+  app.get('/api/v2/stream/:id/:type', function (req, res) {
+    Helpers.logRequest('FILE_STREAM');
+    const id = req.params.id;
+    const type = req.params.type;
+    let job = JobLib.get(id);
+
+    if (!job || !Object.keys(job).length) {
+      return res.status(404).send('Job not found.');
+    }
+
+    const mediaObject = _.get(job, 'data.media', {})[type];
+    if (!mediaObject || !mediaObject.urlRaw) {
+      return res.status(404).send('Media type not found.');
+    }
+
+    request(mediaObject.urlRaw).pipe(res);
+  });
+
+  /**
+   * API v2
+   * GET /stats
+   */
+  app.get('/api/v2/stats', function (req, res) {
+    const requestLogData = Helpers.getJson('../requestlog');
+    res.json(requestLogData);
+  });
+
+
+
+  /**
+   * API v1
+   */
+  app.get('/api/v1/resolve', function (req, res) {
     const types = typeof req.query.type === 'string' ? req.query.type.split(',') : [];
     let url = req.query.url;
     let opts = {
@@ -122,37 +213,24 @@ routes.push({
     }
 
     if (typeof url !== 'string') {
+      Helpers.logRequest('URL_LOOKUP_REQUEST_ERR');
       return res.json({error: 'Invalid URL'});
     }
     url = url.trim();
 
     if (url.length < 1 || url.indexOf('http') !== 0) {
+      Helpers.logRequest('URL_LOOKUP_REQUEST_ERR');
       return res.json({error: 'Invalid URL'});
     }
 
+    Helpers.logRequest('URL_LOOKUP_REQUEST_API');
+
     resolvers(url, opts, function (data) {
-      // Helpers.logRequest('API v1: URL resolved');
-      Helpers.logRequest('URL resolved');
+      Helpers.logRequest('URL_LOOKUP_RESULT_API');
       const rtn = _.omit(data, 'errors');
       res.json(rtn);
     });
-  }
-});
-
-
-
-
-
-
-
-function registerRoutes(app, routesArray) {
-  for (var i = 0; i < routesArray.length; i++) {
-    var currentRoute = routesArray[i];
-    // console.log('Registering route:', currentRoute.method, currentRoute.path);
-
-    app[currentRoute.method.toLowerCase()](currentRoute.path, currentRoute.handler);
-  }
+  });
 }
 
 module.exports = routes;
-module.exports.registerRoutes = registerRoutes;

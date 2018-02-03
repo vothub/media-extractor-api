@@ -15,7 +15,6 @@ const appNetwork = ['public', 'private'].indexOf(appNetworkRaw) === -1 ? 'local'
 
 const networks = {
   public: '0',
-  private: false,
   local: '127.0.0.1'
 };
 
@@ -24,7 +23,6 @@ const privateInterface = os.networkInterfaces()['eth1'];
 if (privateInterface) {
   networks.private = _.map(_.find(privateInterface, {family: 'IPv4'}), 'address');
 }
-
 
 const appNetworkInterface = networks[appNetwork];
 
