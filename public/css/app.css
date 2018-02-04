@@ -16,3 +16,13 @@ h1 img.icon {top: -3px; position: relative; height: 46px;}
 .input-group-addon button {border-radius: 0 5px 5px 0; margin-right: -3px; margin-top: -1px; font-weight: 300}
 
 .dim {opacity: 0.7}
+.small {font-size: 0.9em}
+
+.text-reading-mode {
+  border: 1px solid #eaeaea;
+  background: #fffaf1;
+  padding: 30px;
+  font-size: 1.2em;
+  line-height: 2em;
+  font-family: 'Georgia', serif;
+}

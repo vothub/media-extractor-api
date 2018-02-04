@@ -7,28 +7,115 @@
   {{/if}}
 {{else}}
 
-  <p><strong>{{data.title}}</strong></p>
 
-  <p><small>{{data.url}}</small></p>
+  {{#if data.clean}}
+    <div class="result-html">
+      <h4>{{data.title}}</h4>
 
-  <br />
+      <p><i>{{{data.description}}}</i></p>
 
-  {{#if data.media}}
-    {{#if data.media.audio}}
-    <a href="{{data.media.audio.urlProxied}}" class="btn btn-md btn-success" target="_blank">Audio (private)</a> &nbsp; &nbsp;
-      <a href="{{data.media.audio.urlRaw}}" class="btn btn-md" target="_blank">Audio (direct link)</a>
-      <br /><br />
-    {{/if}}
+      <div>
+        {{#if data.clean.publisher}}
+          <span class="small">
+            <strong>Published in:</strong> {{data.clean.publisher}}
+          </span>
+        {{/if}}
 
-    {{#if data.media.video}}
-    <a href="{{data.media.video.urlProxied}}" class="btn btn-md btn-success" target="_blank">Video (private)</a> &nbsp; &nbsp;
-      <a href="{{data.media.video.urlRaw}}" class="btn btn-md btn-default" target="_blank">Video (direct link)</a>
-      <br /><br />
-    {{/if}}
+        &nbsp;
+
+        {{#if data.clean.date}}
+          <span class="small">
+            <strong>Publication date:</strong> {{data.clean.date}}
+          </span>
+        {{/if}}
+      </div>
+
+      {{#if data.clean.author}}
+      <span class="small">
+        <strong>Author:</strong> {{data.clean.author}}
+      </span>
+      {{/if}}
+
+      <p class="small dim">
+        <strong>URL:</strong>
+        {{data.url}}
+      </p>
+
+      {{#if data.clean.copyright}}
+        <p class="small">
+          <strong>Copyright:</strong> {{data.clean.copyright}}
+        </p>
+      {{/if}}
+
+      {{#if data.clean.image}}
+        <p><img src="{{data.clean.image}}" class="img-responsive" /></p>
+      {{/if}}
+
+      {{#if data.clean.text}}
+        <div class="text-reading-mode hide">
+          {{{data.clean.text}}}
+        </div>
+      {{/if}}
+
+      {{#if data.clean.videos}}
+        <div>{{{data.clean.videos}}}</div>
+      {{/if}}
+      {{#if data.clean.links}}
+        <strong>Links</strong>
+        <ul>
+          {{#each data.clean.links}}
+            <li>{{!this.text}}{{this.href}}</li>
+          {{/each}}
+        </ul>
+      {{/if}}
+      {{#if data.clean.metaTags}}
+        <strong>Meta tags</strong>
+        <ul>
+          {{#each data.clean.metaTags}}
+            <li>{{this.property}}{{this.name}}{{this.http-equiv}}: {{this.content}}</li>
+          {{/each}}
+        </ul>
+      {{/if}}
+
+      {{#if data.raw.headers}}
+        <strong>HTTP headers</strong>
+        <ul>
+          {{#each data.raw.headers}}
+            <li>{{@key}}: {{this}}</li>
+          {{/each}}
+        </ul>
+      {{/if}}
+
+      {{#if data.raw.body}}
+        <!-- <pre>{{!data.raw.body}}</pre> -->
+      {{/if}}
+
+    </div>
   {{/if}}
 
-  <br />
 
-  <p class="dim">{{{data.description}}}</p>
+  {{#if data.media}}
+    <div class="result-media">
+      <h4>{{data.title}}</h4>
+      <p class="small">{{data.url}}</p>
+
+      <br />
+      {{#if data.media.audio}}
+      <a href="{{data.media.audio.urlProxied}}" class="btn btn-md btn-success" target="_blank">Audio (private)</a> &nbsp; &nbsp;
+        <a href="{{data.media.audio.urlRaw}}" class="btn btn-md" target="_blank">Audio (direct link)</a>
+        <br /><br />
+      {{/if}}
+
+      {{#if data.media.video}}
+      <a href="{{data.media.video.urlProxied}}" class="btn btn-md btn-success" target="_blank">Video (private)</a> &nbsp; &nbsp;
+        <a href="{{data.media.video.urlRaw}}" class="btn btn-md btn-default" target="_blank">Video (direct link)</a>
+        <br /><br />
+      {{/if}}
+
+      <br />
+      <p class="dim">{{{data.description}}}</p>
+    </div>
+  {{/if}}
+
 
 {{/unless}}

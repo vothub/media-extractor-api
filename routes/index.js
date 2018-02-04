@@ -70,12 +70,13 @@ function routes(app) {
   app.post('/create', function (req, res) {
     Helpers.logRequest('URL_LOOKUP_REQUEST_WEB');
     const inputUrl = (req.body.url || '').trim();
+    const inputType = (req.body.type || 'media').trim();
 
     if (!inputUrl.length) {
       return res.status(412).send('No URL provided.');
     }
 
-    const jobData = {url: inputUrl, opts: {ytdl: true}};
+    const jobData = {url: inputUrl, type: inputType};
     const jobId = JobLib.create(jobData);
 
     JobLib.start(jobId);
@@ -93,11 +94,15 @@ function routes(app) {
     if (job && job.data && job.data.description) {
       job.data.description = job.data.description.replace(/\n/g, '<br />');
     }
+    if (job && job.data && job.data.clean && job.data.clean.text) {
+      job.data.clean.text = job.data.clean.text.replace(/\n/g, '<br />');
+    }
 
     if (job) {
       // bind data to page
       res.locals.pageTitle = _.get(job, 'data.title', 'Resolving') + ' - URLGent';
       res.locals.data = _.get(job, 'data');
+      // console.log(JSON.stringify(res.locals.data, null, 2));
       res.locals.id = _.get(job, 'id');
       res.locals.exists = true;
     }
@@ -136,7 +141,7 @@ function routes(app) {
       return res.status(412).send('The only supported "type" is "media".');
     }
 
-    const jobData = {url: inputUrl, opts: {ytdl: true}};
+    const jobData = {url: inputUrl, type: inputType};
     const jobId = JobLib.create(jobData);
 
     JobLib.start(jobId);
@@ -196,21 +201,8 @@ function routes(app) {
    * API v1
    */
   app.get('/api/v1/resolve', function (req, res) {
-    const types = typeof req.query.type === 'string' ? req.query.type.split(',') : [];
+    const type = req.query.type.split;
     let url = req.query.url;
-    let opts = {
-      ytdl: false,
-      raw: false,
-      clean: false
-    };
-
-    if (types.indexOf('media') != -1) {
-      opts.ytdl = true;
-    }
-
-    if (types.indexOf('html') != -1) {
-      opts.html = true;
-    }
 
     if (typeof url !== 'string') {
       Helpers.logRequest('URL_LOOKUP_REQUEST_ERR');
@@ -225,7 +217,7 @@ function routes(app) {
 
     Helpers.logRequest('URL_LOOKUP_REQUEST_API');
 
-    resolvers(url, opts, function (data) {
+    resolvers(url, type, function (data) {
       Helpers.logRequest('URL_LOOKUP_RESULT_API');
       const rtn = _.omit(data, 'errors');
       res.json(rtn);
