@@ -31,6 +31,8 @@ const config = {
   appPort,
   appNetwork,
   appNetworkInterface,
+  mongoUrl: clOpts.mongoUrl || clOpts.mongourl || clOpts.mongo,
+  memcache: clOpts.memcache || 30 * 60000, // 30 minutes
   paths: {
     public: path.join(__dirname, 'public'),
     views: path.join(__dirname, 'views'),

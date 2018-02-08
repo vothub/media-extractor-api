@@ -77,10 +77,10 @@ function routes(app) {
     }
 
     const jobData = {url: inputUrl, type: inputType};
-    const jobId = JobLib.create(jobData);
-
-    JobLib.start(jobId);
-    res.redirect('/view/' + jobId);
+    JobLib.create(jobData, function (err, jobId) {
+      JobLib.start(jobId);
+      res.redirect('/view/' + jobId);
+    });
   });
 
   /**
@@ -90,24 +90,25 @@ function routes(app) {
   app.get('/view/:id', function (req, res) {
     Helpers.logRequest('URL_LOOKUP_RESULT_WEB');
     const id = req.params.id;
-    const job = JobLib.get(id);
-    if (job && job.data && job.data.description) {
-      job.data.description = job.data.description.replace(/\n/g, '<br />');
-    }
-    if (job && job.data && job.data.clean && job.data.clean.text) {
-      job.data.clean.text = job.data.clean.text.replace(/\n/g, '<br />');
-    }
+    JobLib.get(id, function (err, job) {
+      if (job && job.data && job.data.description) {
+        job.data.description = job.data.description.replace(/\n/g, '<br />');
+      }
+      if (job && job.data && job.data.clean && job.data.clean.text) {
+        job.data.clean.text = job.data.clean.text.replace(/\n/g, '<br />');
+      }
 
-    if (job) {
-      // bind data to page
-      res.locals.pageTitle = _.get(job, 'data.title', 'Resolving') + ' - URLGent';
-      res.locals.data = _.get(job, 'data');
-      // console.log(JSON.stringify(res.locals.data, null, 2));
-      res.locals.id = _.get(job, 'id');
-      res.locals.exists = true;
-    }
+      if (job) {
+        // bind data to page
+        res.locals.pageTitle = _.get(job, 'data.title', 'Resolving') + ' - URLGent';
+        res.locals.data = _.get(job, 'data');
+        // console.log(JSON.stringify(res.locals.data, null, 2));
+        res.locals.id = _.get(job, 'id');
+        res.locals.exists = true;
+      }
 
-    res.render('pages/view-result');
+      res.render('pages/view-result');
+    });
   });
 
 
@@ -142,10 +143,11 @@ function routes(app) {
     }
 
     const jobData = {url: inputUrl, type: inputType};
-    const jobId = JobLib.create(jobData);
+    JobLib.create(jobData, function (err, jobId) {
+      JobLib.start(jobId);
+      res.json({id: jobId, url: '/api/v2/get/' + jobId});
+    });
 
-    JobLib.start(jobId);
-    res.json({id: jobId, url: '/api/v2/get/' + jobId});
   });
 
   /**
@@ -155,13 +157,13 @@ function routes(app) {
   app.get('/api/v2/get/:id', function (req, res) {
     Helpers.logRequest('URL_LOOKUP_RESULT_API');
     const id = req.params.id;
-    let job = JobLib.get(id);
+    JobLib.get(id, function (err, job) {
+      if (!job || !Object.keys(job).length) {
+        return res.status(404).send('Job not found.');
+      }
 
-    if (!job || !Object.keys(job).length) {
-      return res.status(404).send('Job not found.');
-    }
-
-    res.json(job);
+      res.json(job);
+    });
   });
 
   /**
@@ -172,18 +174,18 @@ function routes(app) {
     Helpers.logRequest('FILE_STREAM');
     const id = req.params.id;
     const type = req.params.type;
-    let job = JobLib.get(id);
+    JobLib.get(id, function (err, job) {
+      if (!job || !Object.keys(job).length) {
+        return res.status(404).send('Job not found.');
+      }
 
-    if (!job || !Object.keys(job).length) {
-      return res.status(404).send('Job not found.');
-    }
+      const mediaObject = _.get(job, 'data.media', {})[type];
+      if (!mediaObject || !mediaObject.urlRaw) {
+        return res.status(404).send('Media type not found.');
+      }
 
-    const mediaObject = _.get(job, 'data.media', {})[type];
-    if (!mediaObject || !mediaObject.urlRaw) {
-      return res.status(404).send('Media type not found.');
-    }
-
-    request(mediaObject.urlRaw).pipe(res);
+      request(mediaObject.urlRaw).pipe(res);
+    });
   });
 
   /**
