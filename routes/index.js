@@ -18,7 +18,7 @@ function routes(app) {
    */
   app.get('/', function (req, res) {
     Helpers.logRequest('PAGE_VIEW');
-    res.locals.pageTitle = 'URLGent. Because privacy.';
+    res.locals.pageTitle = 'URLGent. Browse privately. No bloat.';
     res.render('pages/home');
   });
 
