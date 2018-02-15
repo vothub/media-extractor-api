@@ -20,7 +20,7 @@
     "lodash": "^4.17.4",
     "mongodb": "2.2.34",
     "request": "^2.76.0",
-    "unfluff": "^1.1.0",
+    "unfluff": "^3.0.0",
     "uuid": "^3.2.1",
     "youtube-dl": "^1.11.1"
   }
