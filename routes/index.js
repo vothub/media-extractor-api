@@ -203,7 +203,7 @@ function routes(app) {
    * API v1
    */
   app.get('/api/v1/resolve', function (req, res) {
-    const type = req.query.type.split;
+    const type = req.query.type;
     let url = req.query.url;
 
     if (typeof url !== 'string') {
