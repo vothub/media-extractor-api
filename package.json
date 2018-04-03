@@ -7,8 +7,8 @@
     "type": "git",
     "url": "https://github.com/vot/urlgent.git"
   },
-  "author": "Vot Z <http://vot-z.com>",
-  "license": "ISC",
+  "author": "Vot Z <https://vot-z.com>",
+  "license": "LGPL-3.0",
   "dependencies": {
     "async": "^2.1.4",
     "body-parser": "^1.16.0",
