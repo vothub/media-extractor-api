@@ -1,5 +1,7 @@
 # URLGent
 
+[![LGPL-3.0 License](https://img.shields.io/badge/license-LGPL--3.0-blue.svg)](https://spdx.org/licenses/LGPL-3.0)
+
 The application running at urlgent.com.
 
 ## Changelog
