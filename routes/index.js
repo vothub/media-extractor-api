@@ -91,6 +91,23 @@ function routes(app) {
     Helpers.logRequest('URL_LOOKUP_RESULT_WEB');
     const id = req.params.id;
     JobLib.get(id, function (err, job) {
+
+      if (job && job.id) {
+        if (job.state === 'complete' && !job.lastResolvedTimestamp) {
+          job.lastResolvedTimestamp = 0;
+        }
+        var lastResolved = new Date(job.lastResolvedTimestamp);
+        var now = new Date();
+        var diff = now - lastResolved;
+        var ttl = 60 * 60 * 1000;
+
+        if (diff > ttl) {
+          console.log('Data for ' + job.id + ' last resolved over an hour ago - refreshing.');
+          JobLib.start(job.id);
+          return res.redirect('/view/' + job.id);
+        }
+      }
+
       if (job && job.data && job.data.description) {
         job.data.description = job.data.description.replace(/\n/g, '<br />');
       }
