@@ -26,3 +26,6 @@ h1 img.icon {top: -3px; position: relative; height: 46px;}
   line-height: 2em;
   font-family: 'Georgia', serif;
 }
+
+
+#video, #audio {width: 100%}

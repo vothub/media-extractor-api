@@ -100,20 +100,44 @@
       <p class="small">{{data.url}}</p>
 
       <br />
-      {{#if data.media.audio}}
-      <a href="{{data.media.audio.urlProxied}}" class="btn btn-md btn-success" target="_blank">Audio (private)</a> &nbsp; &nbsp;
-        <a href="{{data.media.audio.urlRaw}}" class="btn btn-md btn-default" target="_blank">Audio (direct link)</a>
-        <br /><br />
-      {{/if}}
 
-      {{#if data.media.video}}
-      <a href="{{data.media.video.urlProxied}}" class="btn btn-md btn-success" target="_blank">Video (private)</a> &nbsp; &nbsp;
-        <a href="{{data.media.video.urlRaw}}" class="btn btn-md btn-default" target="_blank">Video (direct link)</a>
-        <br /><br />
-      {{/if}}
+      <div class="row">
+        <div class="col-xs-12 col-sm-4" style="min-height: 400px">
+          {{#if data.media.audio}}
+          <span class="btn btn-md btn-success" onclick="playAudioOnPage('{{data.media.audio.urlProxied}}')">Play audio</span>
+          <br /><br />
+          {{/if}}
 
-      <br />
+          {{#if data.media.video}}
+          <span class="btn btn-md btn-success" onclick="playVideoOnPage('{{data.media.video.urlProxied}}')">Play video</span>
+          <br /><br />
+          {{/if}}
+
+          {{#if data.media.audio}}
+          <a href="{{data.media.audio.urlProxied}}" class="btn btn-sm btn-default" target="_blank">Open audio in a new tab</a> &nbsp; &nbsp;
+          <br /><br />
+          {{/if}}
+
+          {{#if data.media.video}}
+          <a href="{{data.media.video.urlProxied}}" class="btn btn-sm btn-default" target="_blank">Open video in a new tab</a> &nbsp; &nbsp;
+          <br /><br />
+          {{/if}}
+        </div>
+
+        <div class="col-xs-12 col-sm-8">
+          <audio id="audio" class="hidden" controls="true"></audio>
+          <video id="video" class="hidden" controls="true"></video>
+        </div>
+
+      </div>
+
+      <h5>Media description</h5>
       <p class="dim">{{{data.description}}}</p>
+
+      <br /><br />
+
+      <small>All data is proxied through URLGent servers to ensure your privacy.<br />
+      Your IP is not collected and your computer never contacts third-party servers when using this website.</small>
     </div>
   {{/if}}
 
