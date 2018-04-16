@@ -111,12 +111,14 @@
         <span class="btn btn-md btn-success" onclick="playVideoOnPage('{{data.media.video.urlProxied}}')">Play video</span>
         {{/if}}
 
+        &nbsp; &nbsp;
+
         {{#if data.media.audio}}
-        <a href="{{data.media.audio.urlProxied}}" class="btn btn-sm btn-default" target="_blank">Open audio in a new tab</a> &nbsp; &nbsp;
+        <a href="{{data.media.audio.urlProxied}}" class="btn btn-sm btn-default" target="_blank">Open audio in a new tab</a>
         {{/if}}
 
         {{#if data.media.video}}
-        <a href="{{data.media.video.urlProxied}}" class="btn btn-sm btn-default" target="_blank">Open video in a new tab</a> &nbsp; &nbsp;
+        <a href="{{data.media.video.urlProxied}}" class="btn btn-sm btn-default" target="_blank">Open video in a new tab</a>
         {{/if}}
       </div>
 
@@ -132,6 +134,7 @@
       <h5>Media description</h5>
       <p class="dim">{{{data.description}}}</p>
 
+      <br /><br />
       <br /><br />
 
       <small class="dim">All data is proxied through URLGent servers to ensure your privacy.<br />
