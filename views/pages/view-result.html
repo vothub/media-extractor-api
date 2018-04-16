@@ -95,39 +95,37 @@
 
 
   {{#if data.media}}
+    {{#if data.media.video}}
     <div class="result-media">
       <h4>{{data.title}}</h4>
       <p class="small">{{data.url}}</p>
 
       <br />
 
-      <div class="row">
-        <div class="col-xs-12 col-sm-4" style="min-height: 400px">
-          {{#if data.media.audio}}
-          <span class="btn btn-md btn-success" onclick="playAudioOnPage('{{data.media.audio.urlProxied}}')">Play audio</span>
-          <br /><br />
-          {{/if}}
+      <div>
+        {{#if data.media.audio}}
+        <span class="btn btn-md btn-success" onclick="playAudioOnPage('{{data.media.audio.urlProxied}}')">Play audio</span>
+        {{/if}}
 
-          {{#if data.media.video}}
-          <span class="btn btn-md btn-success" onclick="playVideoOnPage('{{data.media.video.urlProxied}}')">Play video</span>
-          <br /><br />
-          {{/if}}
+        {{#if data.media.video}}
+        <span class="btn btn-md btn-success" onclick="playVideoOnPage('{{data.media.video.urlProxied}}')">Play video</span>
+        {{/if}}
 
-          {{#if data.media.audio}}
-          <a href="{{data.media.audio.urlProxied}}" class="btn btn-sm btn-default" target="_blank">Open audio in a new tab</a> &nbsp; &nbsp;
-          <br /><br />
-          {{/if}}
+        {{#if data.media.audio}}
+        <a href="{{data.media.audio.urlProxied}}" class="btn btn-sm btn-default" target="_blank">Open audio in a new tab</a> &nbsp; &nbsp;
+        {{/if}}
 
-          {{#if data.media.video}}
-          <a href="{{data.media.video.urlProxied}}" class="btn btn-sm btn-default" target="_blank">Open video in a new tab</a> &nbsp; &nbsp;
-          <br /><br />
-          {{/if}}
-        </div>
+        {{#if data.media.video}}
+        <a href="{{data.media.video.urlProxied}}" class="btn btn-sm btn-default" target="_blank">Open video in a new tab</a> &nbsp; &nbsp;
+        {{/if}}
+      </div>
 
-        <div class="col-xs-12 col-sm-8">
-          <audio id="audio" class="hidden" controls="true"></audio>
-          <video id="video" class="hidden" controls="true"></video>
-        </div>
+      <br />
+
+      <div>
+        <audio id="audio" class="hidden" controls="true"></audio>
+        <video id="video" class="hidden" controls="true"></video>
+      </div>
 
       </div>
 
@@ -136,9 +134,15 @@
 
       <br /><br />
 
-      <small>All data is proxied through URLGent servers to ensure your privacy.<br />
+      <small class="dim">All data is proxied through URLGent servers to ensure your privacy.<br />
       Your IP is not collected and your computer never contacts third-party servers when using this website.</small>
     </div>
+
+    {{else}}
+      <h4>{{data.title}}</h4>
+      <p class="small">{{data.url}}</p>
+      <p>There was problem resolving this resource.</p>
+    {{/if}}
   {{/if}}
 
 
