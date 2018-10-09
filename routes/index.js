@@ -117,8 +117,18 @@ function routes(app) {
 
       if (job) {
         // bind data to page
+        const title = _.get(job, 'data.title');
         res.locals.pageTitle = _.get(job, 'data.title', 'Resolving') + ' - URLGent';
         res.locals.data = _.get(job, 'data');
+        //Audio Things
+        const audioExtension = _.get(job, 'data.media.audio.ext');
+        res.locals.audioURL = _.get(job, 'data.media.audio.urlProxied') + "/" + title + "." + audioExtension;
+        res.locals.audioContext = "Open " + title + " audio in a new tab";
+        
+        //Video Things
+        const videoExtension = _.get(job, 'data.media.video.ext');
+        res.locals.videoURL = _.get(job, 'data.media.video.urlProxied') + "/" + title + "." + videoExtension;
+        res.locals.videoContext = "Open " + title + " video in a new tab";
         // console.log(JSON.stringify(res.locals.data, null, 2));
         res.locals.id = _.get(job, 'id');
         res.locals.exists = true;
@@ -191,6 +201,7 @@ function routes(app) {
     Helpers.logRequest('FILE_STREAM');
     const id = req.params.id;
     const type = req.params.type;
+
     JobLib.get(id, function (err, job) {
       if (!job || !Object.keys(job).length) {
         return res.status(404).send('Job not found.');
@@ -201,6 +212,33 @@ function routes(app) {
         return res.status(404).send('Media type not found.');
       }
 
+      request(mediaObject.urlRaw).pipe(res);
+    });
+  });
+
+  app.get('/api/v2/stream/:id/:type/:niceName', function (req, res) {
+    Helpers.logRequest('FILE_STREAM');
+    const id = req.params.id;
+    const type = req.params.type;
+    const niceName = req.params.niceName;
+
+    JobLib.get(id, function (err, job) {
+      if (!job || !Object.keys(job).length) {
+        return res.status(404).send('Job not found.');
+      }
+
+      const mediaObject = _.get(job, 'data.media', {})[type];
+      if (!mediaObject || !mediaObject.urlRaw) {
+        return res.status(404).send('Media type not found.');
+      }
+      //Here is where I change the title
+      const title = _.get(job, 'data.title') + "." + mediaObject.ext;
+      console.log(title);
+      const url = mediaObject.urlProxied + "/" +title;
+      console.log(url);
+      if(niceName != title){
+        res.redirect(url);
+      }
       request(mediaObject.urlRaw).pipe(res);
     });
   });

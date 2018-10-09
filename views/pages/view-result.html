@@ -114,11 +114,11 @@
         &nbsp; &nbsp;
 
         {{#if data.media.audio}}
-        <a href="{{data.media.audio.urlProxied}}" class="btn btn-sm btn-default" target="_blank">Open audio in a new tab</a>
+        <a href="{{audioURL}}" class="btn btn-sm btn-default" target="_blank">{{audioContext}}</a>
         {{/if}}
 
         {{#if data.media.video}}
-        <a href="{{data.media.video.urlProxied}}" class="btn btn-sm btn-default" target="_blank">Open video in a new tab</a>
+        <a href="{{videoURL}}" class="btn btn-sm btn-default" target="_blank">{{videoContext}}</a>
         {{/if}}
       </div>
 
