@@ -107,7 +107,7 @@ function routes(app) {
           return res.redirect('/view/' + job.id);
         }
       }
-
+      
       if (job && job.data && job.data.description) {
         job.data.description = job.data.description.replace(/\n/g, '<br />');
       }
@@ -117,18 +117,8 @@ function routes(app) {
 
       if (job) {
         // bind data to page
-        const title = _.get(job, 'data.title');
         res.locals.pageTitle = _.get(job, 'data.title', 'Resolving') + ' - URLGent';
         res.locals.data = _.get(job, 'data');
-        //Audio Things
-        const audioExtension = _.get(job, 'data.media.audio.ext');
-        res.locals.audioURL = _.get(job, 'data.media.audio.urlProxied') + "/" + title + "." + audioExtension;
-        res.locals.audioContext = "Open " + title + " audio in a new tab";
-        
-        //Video Things
-        const videoExtension = _.get(job, 'data.media.video.ext');
-        res.locals.videoURL = _.get(job, 'data.media.video.urlProxied') + "/" + title + "." + videoExtension;
-        res.locals.videoContext = "Open " + title + " video in a new tab";
         // console.log(JSON.stringify(res.locals.data, null, 2));
         res.locals.id = _.get(job, 'id');
         res.locals.exists = true;
@@ -232,12 +222,11 @@ function routes(app) {
         return res.status(404).send('Media type not found.');
       }
       //Here is where I change the title
-      const title = _.get(job, 'data.title') + "." + mediaObject.ext;
-      console.log(title);
-      const url = mediaObject.urlProxied + "/" +title;
-      console.log(url);
-      if(niceName != title){
-        res.redirect(url);
+      const filename = _.get(job, 'data.title') + "." + mediaObject.ext;
+      
+      const url = mediaObject.urlProxied + "/" +filename;
+      if(niceName != filename){
+        return res.redirect(url);
       }
       request(mediaObject.urlRaw).pipe(res);
     });
