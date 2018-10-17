@@ -3,6 +3,7 @@
  */
 const config = require('../config');
 const MongoClient = require('mongodb').MongoClient;
+
 const mongoUrl = config.mongoUrl;
 
 /**
@@ -11,9 +12,9 @@ const mongoUrl = config.mongoUrl;
  * @param {function} callback Signature: (err, db)
  */
 function _getClient(callback) {
-  MongoClient.connect(mongoUrl, function(err, db) {
+  MongoClient.connect(mongoUrl, (err, db) => {
     if (err || !db) {
-      console.log('Couldn\'t connect to Mongo at ' + url);
+      console.log(`Couldn't connect to Mongo at ${mongoUrl}`);
       if (err) {
         console.error(err);
       }
@@ -32,20 +33,6 @@ function _getClient(callback) {
  */
 function Model(collectionName) {
   if (!mongoUrl) {
-    // return {
-    //   upsertOne: function upsertOne(queryWhere, querySet, callback) {
-    //     return callback();
-    //   },
-    //   findOne: function findOne(query, callback) {
-    //     return callback();
-    //   },
-    //   find: function find(query, callback) {
-    //     return callback();
-    //   },
-    //   deleteOne: function deleteOne(query, callback) {
-    //     return callback();
-    //   }
-    // };
     return undefined;
   }
 
@@ -56,14 +43,14 @@ function Model(collectionName) {
   const rtnModelObject = {
     _type: 'mongo',
     upsert: function upsert(data, callback) {
-      _getClient(function (error, db) {
+      _getClient((error, db) => {
         if (error) {
           console.log(error);
           return callback(error);
         }
         const col = db.collection(collectionName);
 
-        col.updateOne({id: data.id}, data, {upsert: true}, function (err, r) {
+        col.updateOne({ id: data.id }, data, { upsert: true }, (err, r) => {
           // console.log(r.upsertedId._id);
           db.close();
           return callback(err, r);
@@ -72,10 +59,10 @@ function Model(collectionName) {
     },
 
     getById: function getById(id, callback) {
-      _getClient(function (e, db) {
-        var col = db.collection(collectionName);
+      _getClient((e, db) => {
+        const col = db.collection(collectionName);
 
-        col.find({id: id}).limit(1).toArray(function(err, reply) {
+        col.find({ id: id }).limit(1).toArray((err, reply) => {
           db.close();
           return callback(err, (reply && reply.length ? reply[0] : null));
         });
@@ -95,10 +82,10 @@ function Model(collectionName) {
     // },
 
     deleteOne: function deleteOne(query, callback) {
-      _getClient(function (e, db) {
-        var col = db.collection(collectionName);
+      _getClient((e, db) => {
+        const col = db.collection(collectionName);
 
-        col.deleteOne(query, function(err, reply) {
+        col.deleteOne(query, (err, reply) => {
           return callback(null, reply);
         });
       });
@@ -106,7 +93,7 @@ function Model(collectionName) {
   };
 
   return rtnModelObject;
-};
+}
 
 
 const jobsModel = new Model('jobs');

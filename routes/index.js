@@ -16,7 +16,7 @@ function routes(app) {
    * Web
    * Homepage
    */
-  app.get('/', function (req, res) {
+  app.get('/', (req, res) => {
     Helpers.logRequest('PAGE_VIEW');
     res.locals.pageTitle = 'URLGent. Browse privately. No bloat.';
     res.render('pages/home');
@@ -26,7 +26,7 @@ function routes(app) {
    * Web
    * Info page about API
    */
-  app.get('/api', function (req, res) {
+  app.get('/api', (req, res) => {
     Helpers.logRequest('PAGE_VIEW');
     res.locals.pageTitle = 'API - URLGent';
     res.render('pages/api');
@@ -37,11 +37,11 @@ function routes(app) {
    * Web
    * Stats page
    */
-  app.get('/stats', function (req, res) {
+  app.get('/stats', (req, res) => {
     const requestLogData = Helpers.getJson('../requestlog');
     Helpers.logRequest('PAGE_VIEW');
-    let rtn = {};
-    _.each(requestLogData, function (val, key) {
+    const rtn = {};
+    _.each(requestLogData, (val, key) => {
       const total = _.sum(_.map(val));
       rtn[key] = total;
     });
@@ -56,7 +56,7 @@ function routes(app) {
    * Web
    * About page
    */
-  app.get('/about', function (req, res) {
+  app.get('/about', (req, res) => {
     Helpers.logRequest('PAGE_VIEW');
     res.locals.pageTitle = 'About - URLGent';
     res.render('pages/about');
@@ -67,7 +67,7 @@ function routes(app) {
    * Create a lookup request
    * Redirects to lookup results page
    */
-  app.post('/create', function (req, res) {
+  app.post('/create', (req, res) => {
     Helpers.logRequest('URL_LOOKUP_REQUEST_WEB');
     const inputUrl = (req.body.url || '').trim();
     const inputType = (req.body.type || 'media').trim();
@@ -76,10 +76,10 @@ function routes(app) {
       return res.status(412).send('No URL provided.');
     }
 
-    const jobData = {url: inputUrl, type: inputType};
-    JobLib.create(jobData, function (err, jobId) {
+    const jobData = { url: inputUrl, type: inputType };
+    JobLib.create(jobData, (err, jobId) => {
       JobLib.start(jobId);
-      res.redirect('/view/' + jobId);
+      res.redirect(`/view/${jobId}`);
     });
   });
 
@@ -87,27 +87,26 @@ function routes(app) {
    * Web
    * Lookup results page
    */
-  app.get('/view/:id', function (req, res) {
+  app.get('/view/:id', (req, res) => {
     Helpers.logRequest('URL_LOOKUP_RESULT_WEB');
     const id = req.params.id;
-    JobLib.get(id, function (err, job) {
-
+    JobLib.get(id, (err, job) => {
       if (job && job.id) {
         if (job.state === 'complete' && !job.lastResolvedTimestamp) {
           job.lastResolvedTimestamp = 0;
         }
-        var lastResolved = new Date(job.lastResolvedTimestamp);
-        var now = new Date();
-        var diff = now - lastResolved;
-        var ttl = 60 * 60 * 1000;
+        const lastResolved = new Date(job.lastResolvedTimestamp);
+        const now = new Date();
+        const diff = now - lastResolved;
+        const ttl = 60 * 60 * 1000;
 
         if (diff > ttl) {
-          console.log('Data for ' + job.id + ' last resolved over an hour ago - refreshing.');
+          console.log(`Data for ${job.id} last resolved over an hour ago - refreshing.`);
           JobLib.start(job.id);
-          return res.redirect('/view/' + job.id);
+          return res.redirect(`/view/${job.id}`);
         }
       }
-      
+
       if (job && job.data && job.data.description) {
         job.data.description = job.data.description.replace(/\n/g, '<br />');
       }
@@ -117,7 +116,7 @@ function routes(app) {
 
       if (job) {
         // bind data to page
-        res.locals.pageTitle = _.get(job, 'data.title', 'Resolving') + ' - URLGent';
+        res.locals.pageTitle = `${_.get(job, 'data.title', 'Resolving')} - URLGent`;
         res.locals.data = _.get(job, 'data');
         // console.log(JSON.stringify(res.locals.data, null, 2));
         res.locals.id = _.get(job, 'id');
@@ -129,12 +128,11 @@ function routes(app) {
   });
 
 
-
   /**
    * API
    * Middleware
    */
-  app.use('/api', function(req, res, next) {
+  app.use('/api', (req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET,POST');
     res.header('Access-Control-Allow-Headers', 'Content-Type');
@@ -146,35 +144,34 @@ function routes(app) {
    * API v2
    * POST /create
    */
-  app.post('/api/v2/create', function (req, res) {
+  app.post('/api/v2/create', (req, res) => {
     Helpers.logRequest('URL_LOOKUP_REQUEST_API');
     const inputUrl = (req.body.url || '').trim();
     const inputType = (req.body.type || 'media').trim();
 
     if (!inputUrl.length) {
-      return res.status(404).json({error: 'No URL provided.'});
+      return res.status(404).json({ error: 'No URL provided.' });
     }
 
     if (inputType !== 'media') {
       return res.status(412).send('The only supported "type" is "media".');
     }
 
-    const jobData = {url: inputUrl, type: inputType};
-    JobLib.create(jobData, function (err, jobId) {
+    const jobData = { url: inputUrl, type: inputType };
+    JobLib.create(jobData, (err, jobId) => {
       JobLib.start(jobId);
-      res.json({id: jobId, url: '/api/v2/get/' + jobId});
+      res.json({ id: jobId, url: `/api/v2/get/${jobId}` });
     });
-
   });
 
   /**
    * API v2
    * GET /get/:id
    */
-  app.get('/api/v2/get/:id', function (req, res) {
+  app.get('/api/v2/get/:id', (req, res) => {
     Helpers.logRequest('URL_LOOKUP_RESULT_API');
     const id = req.params.id;
-    JobLib.get(id, function (err, job) {
+    JobLib.get(id, (err, job) => {
       if (!job || !Object.keys(job).length) {
         return res.status(404).send('Job not found.');
       }
@@ -187,12 +184,12 @@ function routes(app) {
    * API v2
    * GET /stream/:id/:type
    */
-  app.get('/api/v2/stream/:id/:type', function (req, res) {
+  app.get('/api/v2/stream/:id/:type', (req, res) => {
     Helpers.logRequest('FILE_STREAM');
     const id = req.params.id;
     const type = req.params.type;
 
-    JobLib.get(id, function (err, job) {
+    JobLib.get(id, (err, job) => {
       if (!job || !Object.keys(job).length) {
         return res.status(404).send('Job not found.');
       }
@@ -206,13 +203,13 @@ function routes(app) {
     });
   });
 
-  app.get('/api/v2/stream/:id/:type/:niceName', function (req, res) {
+  app.get('/api/v2/stream/:id/:type/:niceName', (req, res) => {
     Helpers.logRequest('FILE_STREAM');
     const id = req.params.id;
     const type = req.params.type;
     const niceName = req.params.niceName;
 
-    JobLib.get(id, function (err, job) {
+    JobLib.get(id, (err, job) => {
       if (!job || !Object.keys(job).length) {
         return res.status(404).send('Job not found.');
       }
@@ -221,11 +218,11 @@ function routes(app) {
       if (!mediaObject || !mediaObject.urlRaw) {
         return res.status(404).send('Media type not found.');
       }
-      //Here is where I change the title
-      const filename = _.get(job, 'data.title') + "." + mediaObject.ext;
-      
-      const url = mediaObject.urlProxied + "/" +filename;
-      if(niceName != filename){
+      // Here is where I change the title
+      const filename = `${_.get(job, 'data.title')}.${mediaObject.ext}`;
+
+      const url = `${mediaObject.urlProxied}/${filename}`;
+      if (niceName !== filename) {
         return res.redirect(url);
       }
       request(mediaObject.urlRaw).pipe(res);
@@ -236,34 +233,33 @@ function routes(app) {
    * API v2
    * GET /stats
    */
-  app.get('/api/v2/stats', function (req, res) {
+  app.get('/api/v2/stats', (req, res) => {
     const requestLogData = Helpers.getJson('../requestlog');
     res.json(requestLogData);
   });
 
 
-
   /**
    * API v1
    */
-  app.get('/api/v1/resolve', function (req, res) {
+  app.get('/api/v1/resolve', (req, res) => {
     const type = req.query.type;
     let url = req.query.url;
 
     if (typeof url !== 'string') {
       Helpers.logRequest('URL_LOOKUP_REQUEST_ERR');
-      return res.json({error: 'Invalid URL'});
+      return res.json({ error: 'Invalid URL' });
     }
     url = url.trim();
 
     if (url.length < 1 || url.indexOf('http') !== 0) {
       Helpers.logRequest('URL_LOOKUP_REQUEST_ERR');
-      return res.json({error: 'Invalid URL'});
+      return res.json({ error: 'Invalid URL' });
     }
 
     Helpers.logRequest('URL_LOOKUP_REQUEST_API');
 
-    resolvers(url, type, function (data) {
+    resolvers(url, type, (data) => {
       Helpers.logRequest('URL_LOOKUP_RESULT_API');
       const rtn = _.omit(data, 'errors');
       res.json(rtn);

@@ -3,7 +3,7 @@ const routes = require('./routes');
 const express = require('express');
 const bodyParser = require('body-parser');
 
-function startApp () {
+function startApp() {
   const app = express();
 
   app.disable('x-powered-by');
@@ -12,7 +12,7 @@ function startApp () {
 
   const hbs = config.views.engine;
   hbs.registerPartials(config.views.partialsPath);
-  app.engine('html', hbs.__express);
+  app.engine('html', hbs.__express); // eslint-disable-line no-underscore-dangle
   app.set('view engine', 'html');
 
   routes(app);
@@ -23,7 +23,7 @@ function startApp () {
   }
 
   // start app
-  app.listen(config.appPort, config.appNetworkInterface, 0, function () {
+  app.listen(config.appPort, config.appNetworkInterface, 0, () => {
     console.log('URLGent listening on port', config.appPort);
   });
 }

@@ -1,43 +1,7 @@
 /**
  * Memcache adapter
  */
-const _ = require('lodash');
-const config = require('../config');
-const memcacheTTL = config.memcache;
 const cache = {};
-
-// function shouldUseCache(store, key) {
-//   if (memcacheTTL === 0)
-//   var cacheObj = _.get(cache, [store, key].join('.'));
-//   if (!cacheObj) {
-//     console.log('[' + store + ']', 'Not cached:', key);
-//     return false;
-//   }
-//
-//   var stamp = cacheObj.cachetimestamp || 0;
-//
-//   return (stamp + memcacheTTL > Date.now());
-// }
-
-// function save(store, key, value) {
-//   if (!value) {
-//     return;
-//   }
-//   console.log('[' + store + ']', 'Store cache:', key);
-//   value.cachetimestamp = Date.now();
-//   _.set(cache, [store, key].join('.'), value)
-// }
-
-// function get(store, key) {
-//   console.log('[' + store + ']', 'Get cache:', key);
-//   return _.get(cache, [store, key].join('.'));
-// }
-
-// module.exports = {
-//   get: get,
-//   save: save,
-//   shouldUseCache: shouldUseCache
-// }
 
 /**
  * Base model to instantiate a collection-specific model
@@ -79,16 +43,16 @@ function Model(storeName) {
     //     });
     // },
 
-    deleteOne: function deleteOne(query, callback) {
-      delete store[id];
-      // col.deleteOne(query, function(err, reply) {
-      //   return callback(null, reply);
-      // });
-    }
+    // deleteOne: function deleteOne(id, callback) {
+    //   delete store[id];
+    //   // col.deleteOne(query, function(err, reply) {
+    //   //   return callback(null, reply);
+    //   // });
+    // }
   };
 
   return rtnModelObject;
-};
+}
 
 
 const jobsModel = new Model('jobs');

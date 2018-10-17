@@ -4,11 +4,12 @@ const fse = require('fs-extra');
 const os = require('os');
 const hbs = require('hbs');
 const clarg = require('clarg');
+
 const clOpts = clarg().opts;
 
 const appPortRaw = clOpts.port || clOpts.p;
 const appPortParsed = parseInt(appPortRaw, 10);
-const appPort = (appPortRaw == appPortParsed) ? appPortParsed : 3000;
+const appPort = (appPortRaw == appPortParsed) ? appPortParsed : 3000; // eslint-disable-line eqeqeq
 
 const appNetworkRaw = (clOpts.network || clOpts.n || '').trim();
 const appNetwork = ['public', 'private'].indexOf(appNetworkRaw) === -1 ? 'local' : appNetworkRaw;
@@ -19,15 +20,15 @@ const networks = {
 };
 
 // fixing for DO setup
-const privateInterface = os.networkInterfaces()['eth1'];
+const privateInterface = os.networkInterfaces().eth1;
 if (privateInterface) {
-  networks.private = _.map(_.find(privateInterface, {family: 'IPv4'}), 'address');
+  networks.private = _.map(_.find(privateInterface, { family: 'IPv4' }), 'address');
 }
 
 const appNetworkInterface = networks[appNetwork];
 
 const config = {
-  baseUrl: clOpts.url || clOpts.u || 'http://localhost:' + appPort,
+  baseUrl: clOpts.url || clOpts.u || `http://localhost:${appPort}`,
   appPort,
   appNetwork,
   appNetworkInterface,
@@ -44,7 +45,7 @@ const config = {
 
 config.views = {
   engine: hbs,
-  partialsPath: config.paths.views + '/partials'
+  partialsPath: `${config.paths.views}/partials`
 };
 
 // ensure request log file
