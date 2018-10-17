@@ -107,7 +107,7 @@ function routes(app) {
           return res.redirect('/view/' + job.id);
         }
       }
-
+      
       if (job && job.data && job.data.description) {
         job.data.description = job.data.description.replace(/\n/g, '<br />');
       }
@@ -191,6 +191,7 @@ function routes(app) {
     Helpers.logRequest('FILE_STREAM');
     const id = req.params.id;
     const type = req.params.type;
+
     JobLib.get(id, function (err, job) {
       if (!job || !Object.keys(job).length) {
         return res.status(404).send('Job not found.');
@@ -201,6 +202,32 @@ function routes(app) {
         return res.status(404).send('Media type not found.');
       }
 
+      request(mediaObject.urlRaw).pipe(res);
+    });
+  });
+
+  app.get('/api/v2/stream/:id/:type/:niceName', function (req, res) {
+    Helpers.logRequest('FILE_STREAM');
+    const id = req.params.id;
+    const type = req.params.type;
+    const niceName = req.params.niceName;
+
+    JobLib.get(id, function (err, job) {
+      if (!job || !Object.keys(job).length) {
+        return res.status(404).send('Job not found.');
+      }
+
+      const mediaObject = _.get(job, 'data.media', {})[type];
+      if (!mediaObject || !mediaObject.urlRaw) {
+        return res.status(404).send('Media type not found.');
+      }
+      //Here is where I change the title
+      const filename = _.get(job, 'data.title') + "." + mediaObject.ext;
+      
+      const url = mediaObject.urlProxied + "/" +filename;
+      if(niceName != filename){
+        return res.redirect(url);
+      }
       request(mediaObject.urlRaw).pipe(res);
     });
   });
