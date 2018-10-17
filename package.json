@@ -1,14 +1,17 @@
 {
   "name": "urlgent",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "URLGent API",
   "main": "index.js",
+  "scripts": {
+    "lint": "./node_modules/.bin/eslint ."
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/vot/urlgent.git"
   },
   "author": "Vot Z <https://vot-z.com>",
-  "license": "LGPL-3.0",
+  "license": "MIT",
   "dependencies": {
     "async": "^2.1.4",
     "body-parser": "^1.16.0",
@@ -23,5 +26,10 @@
     "unfluff": "^3.0.0",
     "uuid": "^3.2.1",
     "youtube-dl": "^1.11.1"
+  },
+  "devDependencies": {
+    "eslint": "^4.9.0",
+    "eslint-config-airbnb-base": "12.1.0",
+    "eslint-plugin-import": "2.8.0"
   }
 }
