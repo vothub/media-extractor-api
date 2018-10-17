@@ -1,10 +1,16 @@
 # URLGent
 
-[![LGPL-3.0 License](https://img.shields.io/badge/license-LGPL--3.0-blue.svg)](https://spdx.org/licenses/LGPL-3.0)
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://spdx.org/licenses/MIT)
 
 The application running at urlgent.com.
 
 ## Changelog
+
+**2.1.0**
+
+- Added route with pre-generated filenames (thanks *@0c0de*)
+- Added linting
+- Changed license from deprecated LGPL-3.0 to MIT
 
 **2.0.0**
 
