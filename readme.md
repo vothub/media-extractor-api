@@ -1,5 +1,7 @@
 # URLGent
 
+[![Issues](https://img.shields.io/github/issues/vot/urlgent.svg)](https://github.com/vot/urlgent/issues)
+[![Build status](https://img.shields.io/circleci/project/github/vot/urlgent/master.svg)](https://circleci.com/gh/vot/urlgent/tree/master)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://spdx.org/licenses/MIT)
 
 The application running at urlgent.com.
