@@ -70,16 +70,16 @@ function Model(collectionName) {
     },
 
 
-    // find: function find(query, callback) {
-    //   _getClient(function (e, db) {
-    //     var col = db.collection(collectionName);
-    //
-    //     col.find(query).toArray(function(err, reply) {
-    //       db.close();
-    //       return callback(err, reply);
-    //     });
-    //   });
-    // },
+    find: function find(query, callback) {
+      _getClient((e, db) => {
+        const col = db.collection(collectionName);
+
+        col.find(query).toArray((err, reply) => {
+          db.close();
+          return callback(err, reply);
+        });
+      });
+    },
 
     deleteOne: function deleteOne(query, callback) {
       _getClient((e, db) => {

@@ -1,0 +1,18 @@
+<h3>10 most recent public lookups</h3>
+<br /><br />
+
+<div class="container">
+  <div class="row">
+    <ul>
+    {{#each history}}
+      {{#if this.data.title}}
+      <li>
+        <a href="/view/{{this.id}}">{{this.data.title}}</a>
+        <!-- <br /> -->
+        <!-- {{this.url}} -->
+      </li>
+      {{/if}}
+    {{/each}}
+    </ul>
+  </div>
+</div>

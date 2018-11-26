@@ -1,6 +1,8 @@
 /**
  * Memcache adapter
  */
+const _ = require('lodash');
+
 const cache = {};
 
 /**
@@ -36,12 +38,14 @@ function Model(storeName) {
     },
 
 
-    // find: function find(query, callback) {
-    //     col.find(query).toArray(function(err, reply) {
-    //       db.close();
-    //       return callback(err, reply);
-    //     });
-    // },
+    find: function find(query, callback) {
+      const dataFlattened = _.map(store, (x) => {
+        return x;
+      });
+      const filtered = _.filter(dataFlattened, query);
+
+      return callback(null, filtered);
+    },
 
     // deleteOne: function deleteOne(id, callback) {
     //   delete store[id];

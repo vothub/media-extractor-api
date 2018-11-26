@@ -54,6 +54,21 @@ function routes(app) {
 
   /**
    * Web
+   * History page
+   */
+  app.get('/history', (req, res) => {
+    Helpers.logRequest('PAGE_VIEW');
+
+    JobLib.getPublicHistory((publicHistoryErr, publicHistoryData) => {
+      res.locals.pageTitle = 'History - URLGent';
+      res.locals.history = publicHistoryData;
+
+      res.render('pages/history');
+    });
+  });
+
+  /**
+   * Web
    * About page
    */
   app.get('/about', (req, res) => {
@@ -71,12 +86,13 @@ function routes(app) {
     Helpers.logRequest('URL_LOOKUP_REQUEST_WEB');
     const inputUrl = (req.body.url || '').trim();
     const inputType = (req.body.type || 'media').trim();
+    const inputPublic = req.body.public === 'true';
 
     if (!inputUrl.length) {
       return res.status(412).send('No URL provided.');
     }
 
-    const jobData = { url: inputUrl, type: inputType };
+    const jobData = { url: inputUrl, type: inputType, public: inputPublic };
     JobLib.create(jobData, (err, jobId) => {
       JobLib.start(jobId);
       res.redirect(`/view/${jobId}`);
