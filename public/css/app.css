@@ -29,3 +29,11 @@ h1 img.icon {top: -3px; position: relative; height: 46px;}
 
 
 #video, #audio {width: 100%}
+
+
+body.dark { color: #aaa; background-color: #111;}
+body.dark .header-nav {background-color: #0c0c0c;}
+body.dark h1 a {color: #ddd;}
+body.dark h1 a:hover {color: #eee;}
+
+body.dark .btn-default {background: #777; color: #dedede; border-color: #444}

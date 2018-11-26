@@ -60,3 +60,13 @@ function stopVideoOnPage() {
   video.pause();
   video.className = 'hidden';
 }
+
+function toggleDarkMode() {
+  var body = document.body;
+  var currentClass = body.className;
+  if (currentClass.indexOf('dark') !== -1) {
+    body.className = currentClass.replace('dark', '');
+  } else {
+    body.className = currentClass + ' dark';
+  }
+}
