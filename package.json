@@ -4,7 +4,9 @@
   "description": "URLGent API",
   "main": "index.js",
   "scripts": {
-    "lint": "./node_modules/.bin/eslint ."
+    "lint": "./node_modules/.bin/eslint .",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -25,11 +27,13 @@
     "request": "^2.76.0",
     "unfluff": "^3.0.0",
     "uuid": "^3.2.1",
-    "youtube-dl": "^1.11.1"
+    "youtube-dl": "^1.11.1",
+    "snyk": "^1.189.0"
   },
   "devDependencies": {
     "eslint": "^4.9.0",
     "eslint-config-airbnb-base": "12.1.0",
     "eslint-plugin-import": "2.8.0"
-  }
+  },
+  "snyk": true
 }
