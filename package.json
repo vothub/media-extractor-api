@@ -1,14 +1,14 @@
 {
-  "name": "urlgent",
+  "name": "@vothub/media-extractor-api",
   "version": "2.1.0",
-  "description": "URLGent API",
+  "description": "Media Extractor API",
   "main": "index.js",
   "scripts": {
     "lint": "./node_modules/.bin/eslint ."
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/vot/urlgent.git"
+    "url": "https://github.com/vothub/media-extractor-api.git"
   },
   "author": "Vot Z <https://vot-z.com>",
   "license": "MIT",

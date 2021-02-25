@@ -24,7 +24,7 @@ function startApp() {
 
   // start app
   app.listen(config.appPort, config.appNetworkInterface, 0, () => {
-    console.log('URLGent listening on port', config.appPort);
+    console.log('Media Extractor API listening on port', config.appPort);
   });
 }
 

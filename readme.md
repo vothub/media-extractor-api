@@ -1,12 +1,10 @@
-# URLGent
+# Media Extractor API
 
 
 [![URLGent.com](https://img.shields.io/website-up-down-green-red/https/urlgent.com.svg?label=urlgent.com)](https://urlgent.com)
-[![Issues](https://img.shields.io/github/issues/vot/urlgent.svg)](https://github.com/vot/urlgent/issues)
-[![Build status](https://img.shields.io/circleci/project/github/vot/urlgent/master.svg)](https://circleci.com/gh/vot/urlgent/tree/master)
+[![Issues](https://img.shields.io/github/issues/vothub/media-extractor-api.svg)](https://github.com/vothub/media-extractor-api/issues)
+[![Build status](https://img.shields.io/circleci/project/github/vothub/media-extractor-api/master.svg)](https://circleci.com/gh/vothub/media-extractor-api/tree/master)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://spdx.org/licenses/MIT)
-
-The application running at urlgent.com.
 
 ## Changelog
 

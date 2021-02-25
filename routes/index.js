@@ -18,7 +18,7 @@ function routes(app) {
    */
   app.get('/', (req, res) => {
     Helpers.logRequest('PAGE_VIEW');
-    res.locals.pageTitle = 'URLGent. Browse privately. No bloat.';
+    res.locals.pageTitle = 'VotHub Media Extractor API. Browse privately. No bloat.';
     res.render('pages/home');
   });
 
@@ -28,7 +28,7 @@ function routes(app) {
    */
   app.get('/api', (req, res) => {
     Helpers.logRequest('PAGE_VIEW');
-    res.locals.pageTitle = 'API - URLGent';
+    res.locals.pageTitle = 'API - VotHub Media Extractor API';
     res.render('pages/api');
   });
 
@@ -46,7 +46,7 @@ function routes(app) {
       rtn[key] = total;
     });
 
-    res.locals.pageTitle = 'Usage stats - URLGent';
+    res.locals.pageTitle = 'Usage stats - VotHub Media Extractor API';
     res.locals.stats = rtn;
 
     res.render('pages/stats');
@@ -58,7 +58,7 @@ function routes(app) {
    */
   app.get('/about', (req, res) => {
     Helpers.logRequest('PAGE_VIEW');
-    res.locals.pageTitle = 'About - URLGent';
+    res.locals.pageTitle = 'About - VotHub Media Extractor API';
     res.render('pages/about');
   });
 
@@ -116,7 +116,7 @@ function routes(app) {
 
       if (job) {
         // bind data to page
-        res.locals.pageTitle = `${_.get(job, 'data.title', 'Resolving')} - URLGent`;
+        res.locals.pageTitle = `${_.get(job, 'data.title', 'Resolving')} - VotHub Media Extractor API`;
         res.locals.data = _.get(job, 'data');
         // console.log(JSON.stringify(res.locals.data, null, 2));
         res.locals.id = _.get(job, 'id');
